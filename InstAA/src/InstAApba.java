@@ -89,8 +89,9 @@ public class ImagePanel extends JPanel{
         
         
         
-        try {              
-           BufferedImage imagen = ImageIO.read(new File("C:/Users/roberto/Desktop/AA-Progra-UNO-/klamar.jpg"));
+        try {
+            String url = "C:/Users/Usuario/Documents/GitHub/AA-Progra-UNO-/klamar.jpg";
+           BufferedImage imagen = ImageIO.read(new File(url));
          // System.out.println(imagen.getRGB(1, 1));
         //System.out.println(imagen.getRGB(2, 5));
         //int x = imagen.getWidth();
@@ -105,35 +106,21 @@ public class ImagePanel extends JPanel{
             
             for (int j=0; j<imagen.getWidth(); j++){
                 //System.out.println(j + " " + i);
-                color = imagen.getRGB(j, i);
+                 color = imagen.getRGB(j, i);
                  blue = color & 0xff;
                  green = (color & 0xff00) >> 8;
                  red = (color & 0xff0000) >> 16;
-                 //imagen.setRGB(j, i, red+green+red+blue);
-                 
-                 //Gray = ( Max(Red, Green, Blue) + Min(Red, Green, Blue) ) / 2
-                 
-                 
-                 
+
                 //Averaging:
-                imagen.setRGB(j, i, ((red+green+blue)/3)*0x00010101);
- 
-                
-                
-                
+                //imagen.setRGB(j, i, ((red+green+blue)/3)*0x00010101);
                 //Desaturation:      
                  //imagen.setRGB(j, i, (((Math.max(Math.max(red, green), blue) + Math.min(Math.min(red, green), blue))/2) *0x00010101));
-                 
-                 
                  //Decomposition max
-                 imagen.setRGB(j, i, ((Math.max(Math.max(red, green), blue)))*0x00010101);
-                 
+                // imagen.setRGB(j, i, ((Math.max(Math.max(red, green), blue)))*0x00010101);
                  //Decomposition min
-                 imagen.setRGB(j, i, ((Math.min(Math.min(red, green), blue)))*0x00010101);
-                 
-               // System.out.println(red +" "+ blue+" " + green);
+                // imagen.setRGB(j, i, ((Math.min(Math.min(red, green), blue)))*0x00010101);
             }
-         //y=1;
+  
         }
  
         //foto = new javax.swing.JLabel();
@@ -141,16 +128,39 @@ public class ImagePanel extends JPanel{
 foto.setIcon(new ImageIcon(imagen));
 foto.updateUI();
 
-/*
-    for (int y = 0;i<imagen.getHeight();i++){
+    //int[ ][ ] kernel = new int[ 3 ][ 3 ];
+    int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
+    //int[ ][ ] kernel = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+    BufferedImage imagenPOST = imagen;
+    
+    for (int y = 0;y<imagen.getHeight()-3;y=y+1){
             
-            for (int x=0; j<imagen.getWidth(); j++){
+            for (int x=0; x<imagen.getWidth()-3; x++){
                 int sum = 0;
                 
-                for (int v = y; )
+                for (int v = 0; v < kernel.length; v++){
+                    for (int u = 0; u < kernel.length; u++){
+                        color = imagen.getRGB(x+u, y+v);
+                        
+                        blue = color & 0xff;
+                        green = (color & 0xff00) >> 8;
+                        red = (color & 0xff0000) >> 16;
+                        sum += green * kernel[u][v];
+                        sum += red * kernel[u][v];
+                        sum += blue * kernel[u][v];
+                        //sum+= (green+blue+red)/3 * kernel[u][v];
+                        //sum+= imagen.getRGB(x+u, y+v) * kernel[u][v];
+                        //sum+= (green+blue+red)/3 * kernel[u][v];
+                    }
+                
+                
+                    
+                }
+                imagenPOST.setRGB(x, y, (sum/16)*0x00010101);
             }
-        }*/
-            
+        }
+        foto.setIcon(new ImageIcon(imagenPOST));
+foto.updateUI();    
 
         //add(picLabel);
        } catch (IOException ex) {
