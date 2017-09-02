@@ -37,7 +37,7 @@ public class ImagePanel extends JPanel{
 
     public ImagePanel() {
        try {                
-          image = ImageIO.read(new File("C:\\Users\\CASA\\Desktop\\klamar.jpg"));
+          image = ImageIO.read(new File("C:\\Users\\roberto\\Desktop\\AA-Progra-UNO-/klamar.jpg"));
        } catch (IOException ex) {
             // handle exception...
        }
@@ -90,7 +90,7 @@ public class ImagePanel extends JPanel{
         
         
         try {              
-           BufferedImage imagen = ImageIO.read(new File("C:/Users/CASA/Desktop/klamar.jpg"));
+           BufferedImage imagen = ImageIO.read(new File("C:/Users/roberto/Desktop/AA-Progra-UNO-/klamar.jpg"));
          // System.out.println(imagen.getRGB(1, 1));
         //System.out.println(imagen.getRGB(2, 5));
         //int x = imagen.getWidth();
@@ -117,11 +117,8 @@ public class ImagePanel extends JPanel{
                  
                 //Averaging:
                 imagen.setRGB(j, i, ((red+green+blue)/3)*0x00010101);
-                foto.setIcon(new ImageIcon(imagen));
-foto.updateUI();
-                try{
-                java.util.concurrent.TimeUnit.SECONDS.sleep(10);}
-                catch (InterruptedException e){}
+ 
+                
                 
                 
                 //Desaturation:      
@@ -138,16 +135,13 @@ foto.updateUI();
             }
          //y=1;
         }
-        
-        
-        
-        
+ 
         //foto = new javax.swing.JLabel();
 //foto.setIcon(new javax.swing.ImageIcon("C:/Users/CASA/Desktop/klamar.jpg"));
 foto.setIcon(new ImageIcon(imagen));
 foto.updateUI();
 
-
+/*
     for (int y = 0;i<imagen.getHeight();i++){
             
             for (int x=0; j<imagen.getWidth(); j++){
@@ -155,7 +149,7 @@ foto.updateUI();
                 
                 for (int v = y; )
             }
-        }
+        }*/
             
 
         //add(picLabel);
