@@ -19,6 +19,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.*;
+import java.lang.Object;
+//import android.graphics.Bitmap;
 public class InstAApba extends javax.swing.JDialog {
 
     /**
@@ -122,52 +124,87 @@ public class ImagePanel extends JPanel{
             }
   
         }
- 
-        //foto = new javax.swing.JLabel();
-//foto.setIcon(new javax.swing.ImageIcon("C:/Users/CASA/Desktop/klamar.jpg"));
-foto.setIcon(new ImageIcon(imagen));
-foto.updateUI();
 
-    //int[ ][ ] kernel = new int[ 3 ][ 3 ];
-    int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
-    //int[ ][ ] kernel = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
-    BufferedImage imagenPOST = imagen;
-    
-    for (int y = 0;y<imagen.getHeight()-3;y=y+1){
-            
-            for (int x=0; x<imagen.getWidth()-3; x++){
-                int sum = 0;
-                
-                for (int v = 0; v < kernel.length; v++){
-                    for (int u = 0; u < kernel.length; u++){
-                        color = imagen.getRGB(x+u, y+v);
-                        
-                        blue = color & 0xff;
-                        green = (color & 0xff00) >> 8;
-                        red = (color & 0xff0000) >> 16;
-                        sum += green * kernel[u][v];
-                        sum += red * kernel[u][v];
-                        sum += blue * kernel[u][v];
-                        //sum+= (green+blue+red)/3 * kernel[u][v];
-                        //sum+= imagen.getRGB(x+u, y+v) * kernel[u][v];
-                        //sum+= (green+blue+red)/3 * kernel[u][v];
-                    }
-                
-                
-                    
-                }
-                imagenPOST.setRGB(x, y, (sum/16)*0x00010101);
-            }
-        }
-        foto.setIcon(new ImageIcon(imagenPOST));
-foto.updateUI();    
-
-        //add(picLabel);
        } catch (IOException ex) {
            System.out.println("Nop");
             // handle exception...
        }
     }
+    
+public void GaussianFilter(){
+    //Bitmap a;
+    try{
+String url = "C:/Users/Usuario/Documents/GitHub/AA-Progra-UNO-/klamar.jpg";
+           BufferedImage imagen = ImageIO.read(new File(url));
+    //int[ ][ ] kernel = new int[ 3 ][ 3 ];
+    int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
+    //int[ ][ ] kernel = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+    BufferedImage imagenPOST = imagen;
+    int color, blue, green, red;
+    for (int asd=2; asd < 200; asd++){
+    for (int y = 1;y<imagen.getHeight()-3;y=y+1){
+            
+            for (int x=1; x<imagen.getWidth()-3; x++){
+                int sum = 0;
+                
+                for (int v = 0; v < 3; v++){
+                    for (int u = 0; u < 3; u++){
+                        color = imagen.getRGB(x+u, y+v);
+                        imagen.getTransparency();
+                        blue = color & 0xff;
+                        green = (color & 0xff00) >> 8;
+                        red = (color & 0xff0000) >> 16;
+                        /*
+                        sum += (green) * kernel[u][v];
+                        sum += (red) * kernel[u][v];
+                       sum += (blue) * kernel[u][v];
+                       */
+                        //sum+= (green+blue+red)/3 * kernel[u][v];
+                        //sum+= (imagen.getRGB(u, v)) * kernel[x-u][y-v];
+                        sum = sum + ((green+blue+red)/3) * kernel[u][v];
+                        //sum = sum + imagen.getTransparency() * kernel[x-u][y-v];
+                    }
+                    
+                //http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/
+                
+                    
+                }
+                //System.out.println(sum/16);
+                imagenPOST.setRGB(x, y, (sum/16)*0x00010101);
+            }
+        }
+    }
+    
+        //imagenPOST = scale(imagenPOST, 1500, 800);
+        
+        foto.setIcon(new ImageIcon(imagenPOST));
+        foto.updateUI(); 
+}catch (IOException e){}
+}
+
+
+//Este método me lo robé :P//
+public static BufferedImage scale(BufferedImage src, int w, int h)
+{
+    BufferedImage img = 
+            new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+    int x, y;
+    int ww = src.getWidth();
+    int hh = src.getHeight();
+    int[] ys = new int[h];
+    for (y = 0; y < h; y++)
+        ys[y] = y * hh / h;
+    for (x = 0; x < w; x++) {
+        int newX = x * ww / w;
+        for (y = 0; y < h; y++) {
+            int col = src.getRGB(newX, ys[y]);
+            img.setRGB(x, y, col);
+        }
+    }
+    return img;
+}
+
+
     
     /**
      * @param args the command line arguments
@@ -202,7 +239,8 @@ foto.updateUI();
                 
                 
                 InstAApba dialog = new InstAApba(new javax.swing.JFrame(), true);
-                dialog.start();
+                //dialog.start();
+                dialog.GaussianFilter();
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
