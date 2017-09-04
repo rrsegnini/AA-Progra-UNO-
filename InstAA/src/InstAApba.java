@@ -134,30 +134,56 @@ public class ImagePanel extends JPanel{
 public void GaussianFilter(){
     //Bitmap a;
     try{
-String url = "C:/Users/Usuario/Documents/GitHub/AA-Progra-UNO-/klamar.jpg";
+String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
            BufferedImage imagen = ImageIO.read(new File(url));
     //int[ ][ ] kernel = new int[ 3 ][ 3 ];
-    int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
-    //int[ ][ ] kernel = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+    //int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
+    /*int[ ][ ] kernel = 
+    {{1, 1, 1, 1, 1, 1, 1}, 
+     {1, 1, 1, 1, 1, 1, 1}, 
+     {1, 1, 1, 1, 1, 1, 1}, 
+     {1, 1, 1, 1, 1, 1, 1}, 
+     {1, 1, 1, 1, 1, 1, 1}, 
+     {1, 1, 1, 1, 1, 1, 1}, 
+     {1, 1, 1, 1, 1, 1, 1}};*/
+    
+    int[ ][ ] kernel = 
+    {{1, 4, 7, 4, 1}, 
+     {4, 16, 26, 16, 4}, 
+     {7, 26, 41, 26, 7}, 
+     {4, 16, 26, 16, 4}, 
+     {1, 4, 7, 4, 1}};
+    
+    /*double[ ][ ] kernel = {{0.003765, 0.015019,0.023792,0.015019,0.003765},
+            {0.015019,0.059912,0.094907,0.059912,0.015019}, 
+        {0.023792,0.094907,0.150342,0.094907,0.023792}, 
+        {0.015019,0.059912,0.094907,0.059912,0.015019}, 
+        {0.003765,0.015019,0.023792,0.015019,0.003765}};*/
+    
+    System.out.println("AAAAA " + kernelSum(kernel));
     BufferedImage imagenPOST = imagen;
     int color, blue, green, red;
-    for (int asd=2; asd < 200; asd++){
-    for (int y = 1;y<imagen.getHeight()-3;y=y+1){
+    for (int asd=0; asd < 3; asd++){
+    for (int y = 1;y<imagen.getHeight()-kernel.length;y=y+1){
             
-            for (int x=1; x<imagen.getWidth()-3; x++){
-                int sum = 0;
+            for (int x=1; x<imagen.getWidth()-kernel.length; x++){
+                //int sum = 0;
+                double sum = 0;
                 
-                for (int v = 0; v < 3; v++){
-                    for (int u = 0; u < 3; u++){
+                for (int v = 0; v < kernel.length; v++){
+                    for (int u = 0; u < kernel.length; u++){
                         color = imagen.getRGB(x+u, y+v);
-                        imagen.getTransparency();
+                        //imagen.getTransparency();
                         blue = color & 0xff;
                         green = (color & 0xff00) >> 8;
                         red = (color & 0xff0000) >> 16;
+                        
+                        //System.out.println(blue & -0xff);
+                        
                         /*
-                        sum += (green) * kernel[u][v];
-                        sum += (red) * kernel[u][v];
-                       sum += (blue) * kernel[u][v];
+                        sum += (((green) * kernel[u][v])/1) & -0xff;
+                        sum += (((red) * kernel[u][v])/1) & -0xff00;
+                       sum += (((blue) * kernel[u][v])/1) & -0xff0000;
                        */
                         //sum+= (green+blue+red)/3 * kernel[u][v];
                         //sum+= (imagen.getRGB(u, v)) * kernel[x-u][y-v];
@@ -170,7 +196,14 @@ String url = "C:/Users/Usuario/Documents/GitHub/AA-Progra-UNO-/klamar.jpg";
                     
                 }
                 //System.out.println(sum/16);
-                imagenPOST.setRGB(x, y, (sum/16)*0x00010101);
+                
+                blue = (int)sum & 0xff;
+                green = ((int)sum & 0xff00) >> 8;
+                red = ((int)sum & 0xff0000) >> 16;
+                
+               // System.out.println(red + ", " + green + " " + blue);
+                //
+                imagenPOST.setRGB(x, y, ((int)sum)/kernelSum(kernel)*0x00010101);
             }
         }
     }
@@ -182,6 +215,30 @@ String url = "C:/Users/Usuario/Documents/GitHub/AA-Progra-UNO-/klamar.jpg";
 }catch (IOException e){}
 }
 
+public int kernelSum(int[][] kernel){
+    int sum=0;
+    for (int i = 0; i < kernel.length; i++){
+        for (int j=0; j < kernel.length; j++)
+        sum += kernel[i][j];
+                
+    } 
+    return sum;   
+}
+
+public int kernelSum(double[][] kernel){
+    double sum=0;
+    for (int i = 0; i < kernel.length; i++){
+        for (int j=0; j < kernel.length; j++)
+        sum += kernel[i][j];
+                
+    } 
+    if (sum<1){
+        return 1;
+    }
+    else{
+        return (int)sum;
+    }   
+}
 
 //Este método me lo robé :P//
 public static BufferedImage scale(BufferedImage src, int w, int h)
