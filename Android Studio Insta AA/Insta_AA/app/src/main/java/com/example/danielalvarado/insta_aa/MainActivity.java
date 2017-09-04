@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void filterButtonClicked(View view) {
+        Intent intent = new Intent(this, FilterActivity.class);
+        startActivity(intent);
+
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

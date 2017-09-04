@@ -36,6 +36,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="46dp"
             android:layout_marginStart="16dp"
+            android:onClick="filterButtonClicked"
             android:text="Filters"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"

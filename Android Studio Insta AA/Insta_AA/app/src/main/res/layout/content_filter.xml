@@ -11,11 +11,92 @@
 
     <ImageView
         android:id="@+id/picImageView"
-        android:layout_width="330dp"
-        android:layout_height="373dp"
+        android:layout_width="314dp"
+        android:layout_height="328dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/editbox_dropdown_dark_frame" />
+        app:srcCompat="@android:drawable/editbox_dropdown_dark_frame"
+        android:layout_marginStart="4dp" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFilterBtns"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-80dp"
+            android:layout_marginLeft="55dp"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
+
+            <Button
+                android:id="@+id/desaturationBtn"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:text="Desaturation"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/decompMinBtn"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:text="Decomp. Min"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/averagingBtn"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="174dp"
+                android:text="Averaging"
+                android:visibility="visible"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:layout_editor_absoluteY="388dp" />
+
+            <Button
+                android:id="@+id/decompMaxBtn"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:text="Decomp. Max"
+                android:visibility="visible" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="205dp"
+        android:layout_height="51dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.01"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
