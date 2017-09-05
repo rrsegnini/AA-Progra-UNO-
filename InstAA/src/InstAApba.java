@@ -138,31 +138,42 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
            BufferedImage imagen = ImageIO.read(new File(url));
     //int[ ][ ] kernel = new int[ 3 ][ 3 ];
     //int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
-    /*int[ ][ ] kernel = 
+    int[ ][ ] kernel = 
     {{1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}};*/
+     {1, 1, 1, 1, 1, 1, 1}};
     
-    int[ ][ ] kernel = 
+    /*int[ ][ ] kernel = 
     {{1, 4, 7, 4, 1}, 
      {4, 16, 26, 16, 4}, 
      {7, 26, 41, 26, 7}, 
      {4, 16, 26, 16, 4}, 
-     {1, 4, 7, 4, 1}};
+     {1, 4, 7, 4, 1}};*/
+    
+    /*int[ ][ ] kernel = 
+    //{{1,  4, 6, 4, 1}, 
+        {{3,  6, 12, 6, 3}, 
+     {3, 12, 25, 12, 3}, 
+     {6, 25, 50, 25, 6}, 
+     {3, 12, 25, 12, 3}, 
+     {3,  6, 12, 6, 3}};*/
+    
+    //, {1, 43, 6, 4, 1}};
     
     /*double[ ][ ] kernel = {{0.003765, 0.015019,0.023792,0.015019,0.003765},
             {0.015019,0.059912,0.094907,0.059912,0.015019}, 
         {0.023792,0.094907,0.150342,0.094907,0.023792}, 
         {0.015019,0.059912,0.094907,0.059912,0.015019}, 
         {0.003765,0.015019,0.023792,0.015019,0.003765}};*/
-    
-    System.out.println("AAAAA " + kernelSum(kernel));
+ 
     BufferedImage imagenPOST = imagen;
     int color, blue, green, red;
+    //kernel = kernelMulEntero(kernel);
+    
     for (int asd=0; asd < 3; asd++){
     for (int y = 1;y<imagen.getHeight()-kernel.length;y=y+1){
             
@@ -209,6 +220,7 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
     }
     
         //imagenPOST = scale(imagenPOST, 1500, 800);
+        recorrerPixelesImagen(imagenPOST);
         
         foto.setIcon(new ImageIcon(imagenPOST));
         foto.updateUI(); 
@@ -223,6 +235,35 @@ public int kernelSum(int[][] kernel){
                 
     } 
     return sum;   
+}
+
+public void recorrerPixelesImagen(BufferedImage imagen){
+        for (int i = 0;i<imagen.getHeight();i++){         
+            for (int j=0; j<imagen.getWidth(); j++){
+                int color, blue, green, red;
+                //System.out.println(j + " " + i);
+                 color = imagen.getRGB(j, i);
+                 blue = color & 0xff;
+                 green = (color & 0xff00) >> 8;
+                 red = (color & 0xff0000) >> 16;
+
+                System.out.println(red + ", " + green + ", " + blue);
+            }
+        }   
+}
+
+public int[][] kernelMulEntero(int[][] kernel){
+    //int[][] kernel_nuevo;
+    for (int i = 0; i < kernel.length; i++){
+        for (int j=0; j < kernel.length; j++){
+        kernel[i][j] = kernel[i][j]/2;
+        System.out.println(kernel[i][j]);
+        }
+        
+        
+                
+    } 
+    return kernel;   
 }
 
 public int kernelSum(double[][] kernel){
