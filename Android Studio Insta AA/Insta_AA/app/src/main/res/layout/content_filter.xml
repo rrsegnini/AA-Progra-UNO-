@@ -21,14 +21,14 @@
         android:layout_marginStart="4dp" />
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="265dp"
+        android:layout_height="106dp"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginBottom="16dp">
+        app:layout_constraintHorizontal_bias="0.352"
+        android:layout_marginBottom="7dp">
 
         <LinearLayout
             android:id="@+id/linearLayoutFilterBtns"
@@ -45,6 +45,7 @@
                 android:id="@+id/desaturationBtn"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
+                android:onClick="desaturationBtnClicked"
                 android:text="Desaturation"
                 android:visibility="visible" />
 
@@ -76,27 +77,27 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_width="205dp"
-        android:layout_height="51dp"
+        android:layout_width="280dp"
+        android:layout_height="53dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.022"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:layout_editor_absoluteY="334dp">
 
         <Button
-            android:id="@+id/button7"
-            android:layout_width="150dp"
+            android:id="@+id/openCameraBtn"
+            android:layout_width="132dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.01"
-            android:text="Button" />
+            android:onClick="takePhotoBtnClicked"
+            android:text="OPEN CAMERA" />
 
         <Button
-            android:id="@+id/button8"
+            android:id="@+id/chooseImgBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:onClick="imageGalleryClicked"
+            android:text="CHOOSE IMAGE" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

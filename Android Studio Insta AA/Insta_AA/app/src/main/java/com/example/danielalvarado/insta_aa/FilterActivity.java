@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.example.danielalvarado.insta_aa.R.id.picImageView;
 
 public class FilterActivity extends AppCompatActivity {
 
@@ -49,7 +54,71 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
-        //imagePicture = (ImageView) findViewById(R.id.cameraImageView);
+        imagePicture = (ImageView) findViewById(picImageView);
+
+        Button buttonDesaturation = (Button) findViewById(R.id.desaturationBtn);
+        buttonDesaturation.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)  {
+                try {
+                    //DESATURATION FUNCTION
+                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+                    Bitmap newDesBitmap = desaturation(bitmap);
+                    imagePicture.setImageBitmap(newDesBitmap);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Button buttonAveraging = (Button) findViewById(R.id.averagingBtn);
+        buttonAveraging.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)  {
+                try {
+                    //AVERAGING FUNCTION
+                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+                    Bitmap newAvgBitmap = avergingImage(bitmap);
+                    imagePicture.setImageBitmap(newAvgBitmap);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Button buttonDeMin = (Button) findViewById(R.id.decompMinBtn);
+        buttonDeMin.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)  {
+                try {
+                    //DECOMP MIN FUNCTION
+                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+                    Bitmap newDeMinBitmap = decompositionMin(bitmap);
+                    imagePicture.setImageBitmap(newDeMinBitmap);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Button buttonDeMax = (Button) findViewById(R.id.decompMaxBtn);
+        buttonDeMax.setOnClickListener(new View.OnClickListener()   {
+            public void onClick(View v)  {
+                try {
+                    //DECOMP MAX FUNCTION
+                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+                    Bitmap newDeMaxBitmap = decompositionMin(bitmap);
+                    imagePicture.setImageBitmap(newDeMaxBitmap);
+
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
@@ -81,6 +150,8 @@ public class FilterActivity extends AppCompatActivity {
         startActivityForResult(photoPickerIntent,IMAGE_GALLERY_REQUEST);
 
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
