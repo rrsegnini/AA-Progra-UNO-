@@ -137,15 +137,29 @@ public void GaussianFilter(){
 String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
            BufferedImage imagen = ImageIO.read(new File(url));
     //int[ ][ ] kernel = new int[ 3 ][ 3 ];
-    //int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
     int[ ][ ] kernel = 
+        {{1,2, 1}, 
+        {2, 4, 2}, 
+        {1, 2, 1}};
+    
+    /*int[ ][ ] kernel = 
+        {{-1, 0, 1}, 
+        {-2, 0, 2}, 
+        {-1, 2, 1}};*/
+    
+    /*int[ ][ ] kernel = 
+        {{-1, 0, 1}, 
+        {-2, 0, 2}, 
+        {-1, 0, 1}};*/
+    
+    /*int[ ][ ] kernel = 
     {{1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}};
+     {1, 1, 1, 1, 1, 1, 1}};/
     
     /*int[ ][ ] kernel = 
     {{1, 4, 7, 4, 1}, 
@@ -172,6 +186,8 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
  
     BufferedImage imagenPOST = imagen;
     int color, blue, green, red;
+    byte r, g, b;
+    double rT = 0.0, gT = 0.0, bT = 0.0, kT = 0.0;
     //kernel = kernelMulEntero(kernel);
     
     for (int asd=0; asd < 3; asd++){
@@ -185,11 +201,27 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
                     for (int u = 0; u < kernel.length; u++){
                         color = imagen.getRGB(x+u, y+v);
                         //imagen.getTransparency();
+                        
+                        r = (byte)((0x00FF0000 & color) >> 16);
+                        g = (byte)((0x0000FF00 & color) >> 8);
+                        b = (byte)((0x000000FF & color));
+                        
+                        /*
                         blue = color & 0xff;
                         green = (color & 0xff00) >> 8;
                         red = (color & 0xff0000) >> 16;
+                        */
                         
-                        //System.out.println(blue & -0xff);
+                        rT += r * kernel[u][v];
+                        gT += g * kernel[u][v];
+                        bT += b * kernel[u][v];
+                        kT += kernel[u][v];
+                        
+                        r = (byte)(rT / kT + 0.5);
+                        g = (byte)(gT / kT + 0.5);
+                        b = (byte)(bT / kT + 0.5);
+                        
+                        sum +=(0xFF000000 | (int)(r << 16) | (int)(g << 8) | b);
                         
                         /*
                         sum += (((green) * kernel[u][v])/1) & -0xff;
@@ -198,7 +230,7 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
                        */
                         //sum+= (green+blue+red)/3 * kernel[u][v];
                         //sum+= (imagen.getRGB(u, v)) * kernel[x-u][y-v];
-                        sum = sum + ((green+blue+red)/3) * kernel[u][v];
+                        //sum = sum + ((green+blue+red)/3) * kernel[u][v];
                         //sum = sum + imagen.getTransparency() * kernel[x-u][y-v];
                     }
                     
@@ -214,13 +246,13 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
                 
                // System.out.println(red + ", " + green + " " + blue);
                 //
-                imagenPOST.setRGB(x, y, ((int)sum)/kernelSum(kernel)*0x00010101);
+                imagenPOST.setRGB(x, y, ((int)sum));
             }
         }
     }
     
         //imagenPOST = scale(imagenPOST, 1500, 800);
-        recorrerPixelesImagen(imagenPOST);
+        //recorrerPixelesImagen(imagenPOST);
         
         foto.setIcon(new ImageIcon(imagenPOST));
         foto.updateUI(); 
@@ -234,7 +266,12 @@ public int kernelSum(int[][] kernel){
         sum += kernel[i][j];
                 
     } 
-    return sum;   
+    if (sum<1){
+        return 1;
+    }
+    else{
+        return sum;
+    }  
 }
 
 public void recorrerPixelesImagen(BufferedImage imagen){
