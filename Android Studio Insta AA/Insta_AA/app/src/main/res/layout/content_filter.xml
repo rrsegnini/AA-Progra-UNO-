@@ -11,24 +11,26 @@
 
     <ImageView
         android:id="@+id/picImageView"
-        android:layout_width="314dp"
-        android:layout_height="328dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="338dp"
+        android:layout_height="295dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/editbox_dropdown_dark_frame"
-        android:layout_marginStart="4dp" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.652"
+        android:scaleType="fitXY"/>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="265dp"
         android:layout_height="106dp"
+        android:layout_marginBottom="55dp"
         android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.352"
-        android:layout_marginBottom="7dp">
+        app:layout_constraintHorizontal_bias="0.403"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <LinearLayout
             android:id="@+id/linearLayoutFilterBtns"
@@ -53,6 +55,7 @@
                 android:id="@+id/decompMinBtn"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
+                android:onClick="decompMinBtnClicked"
                 android:text="Decomp. Min"
                 android:visibility="visible" />
 
@@ -61,6 +64,7 @@
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="174dp"
+                android:onClick="avgBtnClicked"
                 android:text="Averaging"
                 android:visibility="visible"
                 app:layout_constraintRight_toRightOf="parent"
@@ -70,6 +74,7 @@
                 android:id="@+id/decompMaxBtn"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"
+                android:onClick="decompMaxBtnClicked"
                 android:text="Decomp. Max"
                 android:visibility="visible" />
 
@@ -77,13 +82,14 @@
     </ScrollView>
 
     <LinearLayout
-        android:layout_width="280dp"
-        android:layout_height="53dp"
+        android:layout_width="358dp"
+        android:layout_height="51dp"
         android:orientation="horizontal"
-        app:layout_constraintHorizontal_bias="0.022"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="334dp">
+        app:layout_constraintBottom_toTopOf="@+id/scrollView"
+        tools:layout_editor_absoluteY="299dp"
+        android:id="@+id/linearLayout">
 
         <Button
             android:id="@+id/openCameraBtn"
@@ -98,6 +104,14 @@
             android:layout_height="wrap_content"
             android:onClick="imageGalleryClicked"
             android:text="CHOOSE IMAGE" />
+
+        <Button
+            android:id="@+id/saveImgBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="saveImgBtnClicked"
+            android:text="SAVE IMG" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

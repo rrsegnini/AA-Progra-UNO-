@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 import static com.example.danielalvarado.insta_aa.R.id.picImageView;
 
@@ -36,6 +38,10 @@ public class FilterActivity extends AppCompatActivity {
     public static final int CAMERA_REQUEST = 10;
     public static final int IMAGE_GALLERY_REQUEST = 13;
     private ImageView imagePicture;
+    private Bitmap originalImage;
+
+
+
     private static final String TAG = "FilterActivity";
 
     @Override
@@ -56,6 +62,7 @@ public class FilterActivity extends AppCompatActivity {
 
         imagePicture = (ImageView) findViewById(picImageView);
 
+        /*
         Button buttonDesaturation = (Button) findViewById(R.id.desaturationBtn);
         buttonDesaturation.setOnClickListener(new View.OnClickListener()   {
             public void onClick(View v)  {
@@ -80,6 +87,8 @@ public class FilterActivity extends AppCompatActivity {
                     Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
                     Bitmap newAvgBitmap = avergingImage(bitmap);
                     imagePicture.setImageBitmap(newAvgBitmap);
+                    // Show toast when method is called:
+                    //Toast.makeText(this, "AVERAGEALLED", Toast.LENGTH_LONG).show();
 
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
@@ -110,7 +119,7 @@ public class FilterActivity extends AppCompatActivity {
                 try {
                     //DECOMP MAX FUNCTION
                     Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-                    Bitmap newDeMaxBitmap = decompositionMin(bitmap);
+                    Bitmap newDeMaxBitmap = decompositionMax(bitmap);
                     imagePicture.setImageBitmap(newDeMaxBitmap);
 
                 } catch (Exception e) {
@@ -120,7 +129,71 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        */
+
     }
+    public void saveImgBtnClicked(View view) {
+        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+        //storeImage(bitmap);
+        Toast.makeText(FilterActivity.this,
+                "Your image is saved to this folder", Toast.LENGTH_LONG)
+                .show();
+        //SaveImage(bitmap);
+        //saveImageToExternalStorage(bitmap);
+        saveImg(bitmap);
+
+    }
+
+    public void desaturationBtnClicked(View view) {
+        //DESATURATION FUNCTION
+        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+        Bitmap newDesBitmap = desaturation(originalImage);
+        imagePicture.setImageBitmap(newDesBitmap);
+        //gets a message
+        Toast.makeText(FilterActivity.this,
+                "Desaturation button clicked", Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    public  void avgBtnClicked(View view) {
+        //AVERAGING FUNCTION
+        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+        Bitmap newAvgBitmap = avergingImage(originalImage);
+        imagePicture.setImageBitmap(newAvgBitmap);
+
+        //gets a message
+        Toast.makeText(FilterActivity.this,
+                "Average button clicked", Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    public void decompMaxBtnClicked(View view) {
+        //DECOMP MAX FUNCTION
+        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+        Bitmap newDeMaxBitmap = decompositionMax(originalImage);
+        imagePicture.setImageBitmap(newDeMaxBitmap);
+        //gets a message
+        Toast.makeText(FilterActivity.this,
+                "Decomposition Max button clicked", Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+
+    public void decompMinBtnClicked(View view) {
+        //DECOMP MAX FUNCTION
+        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+        Bitmap newDeMinBitmap = decompositionMin(originalImage);
+        imagePicture.setImageBitmap(newDeMinBitmap);
+        //gets a message
+        Toast.makeText(FilterActivity.this,
+                "Decomposition Max button clicked", Toast.LENGTH_LONG)
+                .show();
+
+    }
+
 
 
 
@@ -163,10 +236,16 @@ public class FilterActivity extends AppCompatActivity {
                 // we are hearing back from the camera.
                 Bitmap cameraImage = (Bitmap) data.getExtras().get("data");//accessing the image taken
                 //Averaging
-                Bitmap newImage = avergingImage(cameraImage);
+                //Bitmap newImage = avergingImage(cameraImage);
                 //Decomposition MAX
                 //Bitmap newImage = decompositionMax(cameraImage);
-                imagePicture.setImageBitmap(newImage);
+
+                imagePicture.setImageBitmap(cameraImage);
+
+                //creates the private ORIGINAL IMAGE (GLOBAL)
+                originalImage = cameraImage.copy(Bitmap.Config.ARGB_8888, true);
+
+                //storeImage(cameraImage);
 
             }
         }
@@ -190,10 +269,13 @@ public class FilterActivity extends AppCompatActivity {
                     inputStream = getContentResolver().openInputStream(imageUri);
 
                     //get a bitmap from the stream
-                    Bitmap imagepicked = BitmapFactory.decodeStream(inputStream);
+                    Bitmap imagePicked = BitmapFactory.decodeStream(inputStream);
 
                     //show the image in the selected image view (imagePicture is that image view)
-                    imagePicture.setImageBitmap(imagepicked);
+                    imagePicture.setImageBitmap(imagePicked);
+
+                    //
+                    originalImage = imagePicked.copy(Bitmap.Config.ARGB_8888, true);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -298,6 +380,18 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
+    ////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+
     /**
      * Stores the image in the SD card
      * @param image bitmap image that is going to be saved
@@ -346,4 +440,101 @@ public class FilterActivity extends AppCompatActivity {
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
+
+    private void SaveImage(Bitmap finalBitmap) {
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-"+ n +".jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void saveImageToExternalStorage(Bitmap finalBitmap) {
+        String root =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-" + n + ".jpg";
+        File file1 = new File(myDir, fname);
+        if (file1.exists())
+            file1.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file1);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        // Tell the media scanner about the new file so that it is
+        // immediately available to the user.
+        MediaScannerConnection.scanFile(this, new String[] { file1.toString() },                null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i("ExternalStorage", "Scanned " + path + ":");
+                        Log.i("ExternalStorage", "-> uri=" + uri);
+                    }
+                });
+
+    }
+
+    public void saveImg(Bitmap  image) {
+        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String pictureName = getPictureName();
+        File imageFile = new File(pictureDirectory,pictureName);
+        Uri pictureUri = Uri.fromFile(imageFile);
+
+        if (imageFile.exists())
+            imageFile.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(imageFile);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        // Tell the media scanner about the new file so that it is
+        // immediately available to the user.
+        MediaScannerConnection.scanFile(this, new String[] { imageFile.toString() },null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i("ExternalStorage", "Scanned " + path + ":");
+                        Log.i("ExternalStorage", "-> uri=" + uri);
+                    }
+                });
+
+
+    }
+
+    public String getPictureName() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String timeStamp = sdf.format(new Date());
+        return "FilterImg" + timeStamp + ".jpg";
+
+    }
+
 }
