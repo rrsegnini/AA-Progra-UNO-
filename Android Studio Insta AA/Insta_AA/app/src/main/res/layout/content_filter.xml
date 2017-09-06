@@ -44,6 +44,13 @@
             app:layout_constraintLeft_toLeftOf="parent">
 
             <Button
+                android:id="@+id/gaussBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="gaussianBtnClicked"
+                android:text="Gaussian" />
+
+            <Button
                 android:id="@+id/desaturationBtn"
                 android:layout_width="185dp"
                 android:layout_height="wrap_content"

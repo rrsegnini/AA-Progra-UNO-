@@ -1,6 +1,8 @@
 package com.example.danielalvarado.insta_aa;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -37,6 +39,7 @@ public class FilterActivity extends AppCompatActivity {
 
     public static final int CAMERA_REQUEST = 10;
     public static final int IMAGE_GALLERY_REQUEST = 13;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private ImageView imagePicture;
     private Bitmap originalImage;
 
@@ -61,6 +64,7 @@ public class FilterActivity extends AppCompatActivity {
         });
 
         imagePicture = (ImageView) findViewById(picImageView);
+        //originalImage = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
 
         /*
         Button buttonDesaturation = (Button) findViewById(R.id.desaturationBtn);
@@ -132,7 +136,17 @@ public class FilterActivity extends AppCompatActivity {
         */
 
     }
+
+
+
     public void saveImgBtnClicked(View view) {
+        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
+
         Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
         //storeImage(bitmap);
         Toast.makeText(FilterActivity.this,
@@ -141,60 +155,123 @@ public class FilterActivity extends AppCompatActivity {
         //SaveImage(bitmap);
         //saveImageToExternalStorage(bitmap);
         saveImg(bitmap);
-
     }
 
+    /*
+    public void saveImgBtnClicked(View view) {
+        try {
+            Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+            //storeImage(bitmap);
+            Toast.makeText(FilterActivity.this,
+                    "Your image is saved to this folder", Toast.LENGTH_LONG)
+                    .show();
+            //SaveImage(bitmap);
+            //saveImageToExternalStorage(bitmap);
+            saveImg(bitmap);
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    */
+
     public void desaturationBtnClicked(View view) {
-        //DESATURATION FUNCTION
-        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-        Bitmap newDesBitmap = desaturation(originalImage);
-        imagePicture.setImageBitmap(newDesBitmap);
-        //gets a message
-        Toast.makeText(FilterActivity.this,
-                "Desaturation button clicked", Toast.LENGTH_LONG)
-                .show();
+
+        try {
+            //DESATURATION FUNCTION
+            Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+            Bitmap newDesBitmap = desaturation(originalImage);
+            imagePicture.setImageBitmap(newDesBitmap);
+            //gets a message
+            Toast.makeText(FilterActivity.this,
+                    "Desaturation button clicked", Toast.LENGTH_LONG)
+                    .show();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
 
     }
 
     public  void avgBtnClicked(View view) {
-        //AVERAGING FUNCTION
-        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-        Bitmap newAvgBitmap = avergingImage(originalImage);
-        imagePicture.setImageBitmap(newAvgBitmap);
+        try {
+            //AVERAGING FUNCTION
+            Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+            Bitmap newAvgBitmap = avergingImage(originalImage);
+            imagePicture.setImageBitmap(newAvgBitmap);
 
-        //gets a message
-        Toast.makeText(FilterActivity.this,
-                "Average button clicked", Toast.LENGTH_LONG)
-                .show();
+            //gets a message
+            Toast.makeText(FilterActivity.this,
+                    "Average button clicked", Toast.LENGTH_LONG)
+                    .show();
+
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
     public void decompMaxBtnClicked(View view) {
-        //DECOMP MAX FUNCTION
-        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-        Bitmap newDeMaxBitmap = decompositionMax(originalImage);
-        imagePicture.setImageBitmap(newDeMaxBitmap);
-        //gets a message
-        Toast.makeText(FilterActivity.this,
-                "Decomposition Max button clicked", Toast.LENGTH_LONG)
-                .show();
+        try {
+            //DECOMP MAX FUNCTION
+            Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+            Bitmap newDeMaxBitmap = decompositionMax(originalImage);
+            imagePicture.setImageBitmap(newDeMaxBitmap);
+            //gets a message
+            Toast.makeText(FilterActivity.this,
+                    "Decomposition Max button clicked", Toast.LENGTH_LONG)
+                    .show();
+
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
 
     public void decompMinBtnClicked(View view) {
-        //DECOMP MAX FUNCTION
-        Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-        Bitmap newDeMinBitmap = decompositionMin(originalImage);
-        imagePicture.setImageBitmap(newDeMinBitmap);
-        //gets a message
-        Toast.makeText(FilterActivity.this,
-                "Decomposition Max button clicked", Toast.LENGTH_LONG)
-                .show();
+        try {
+            //DECOMP MIN FUNCTION
+            Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
+            Bitmap newDeMinBitmap = decompositionMin(originalImage);
+            imagePicture.setImageBitmap(newDeMinBitmap);
+            //gets a message
+            Toast.makeText(FilterActivity.this,
+                    "Decomposition Max button clicked", Toast.LENGTH_LONG)
+                    .show();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
 
+    public void gaussianBtnClicked(View view) {
+        try {
+
+            Bitmap newGausBitmap = GaussianFilter(originalImage);
+            imagePicture.setImageBitmap(newGausBitmap);
+            //gets a message
+            Toast.makeText(FilterActivity.this,
+                    "Gaussian Filter applied", Toast.LENGTH_LONG)
+                    .show();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 
 
     public void takePhotoBtnClicked(View view) {
@@ -536,5 +613,75 @@ public class FilterActivity extends AppCompatActivity {
         return "FilterImg" + timeStamp + ".jpg";
 
     }
+
+
+    public Bitmap GaussianFilter(Bitmap bitmap){
+        Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        int color, red, blue, green;
+        //int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
+        /*int[ ][ ] kernel =
+        {{1, 1, 1, 1, 1, 1, 1},
+         {1, 1, 1, 1, 1, 1, 1},
+         {1, 1, 1, 1, 1, 1, 1},
+         {1, 1, 1, 1, 1, 1, 1},
+         {1, 1, 1, 1, 1, 1, 1},
+         {1, 1, 1, 1, 1, 1, 1},
+         {1, 1, 1, 1, 1, 1, 1}};*/
+        int[ ][ ] kernel = {{1, 4, 7, 4, 1},
+                {4, 16, 26, 16, 4},
+                {7, 26, 41, 26, 7},
+                {4, 16, 26, 16, 4},
+                {1, 4, 7, 4, 1}};
+        for (int n_filtros=0; n_filtros < 2; n_filtros++){  //Esto es para aplicar el filtro varias veces
+            for (int y = 1;y<image.getHeight()-kernel.length;y=y+1){
+                for (int x=1; x<image.getWidth()-kernel.length; x++){
+                    double sum = 0;
+                    for (int v = 0; v < kernel.length; v++){
+                        for (int u = 0; u < kernel.length; u++){
+
+                            color = image.getPixel(x+u,y+v);
+                            blue = Color.blue(color);
+                            green = Color.green(color);
+                            red = Color.red(color);
+                            sum = sum + ((green+blue+red)/3) * kernel[u][v];
+                        }
+                    }
+                    image.setPixel(x, y, ((int)sum)/kernelSum(kernel)*0x00010101);
+                }
+            }
+        }
+        return image;
+    }
+
+    //Para sacar la suma de todos los elementos del kernel
+    public int kernelSum(int[][] kernel){
+        int sum=0;
+        for (int i = 0; i < kernel.length; i++){
+            for (int j=0; j < kernel.length; j++)
+                sum += kernel[i][j];
+
+        }
+        return sum;
+    }
+
+    /*
+    public int kernelSum(double[][] kernel){
+        double sum=0;
+        for (int i = 0; i < kernel.length; i++){
+            for (int j=0; j < kernel.length; j++)
+                sum += kernel[i][j];
+
+        }
+        if (sum<1){
+            return 1;
+        }
+        else{
+            return (int)sum;
+        }
+    }
+    */
+
+
 
 }
