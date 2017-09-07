@@ -260,6 +260,7 @@ public class FilterActivity extends AppCompatActivity {
         try {
 
             Bitmap newGausBitmap = GaussianFilter(originalImage);
+
             imagePicture.setImageBitmap(newGausBitmap);
             //gets a message
             Toast.makeText(FilterActivity.this,
@@ -323,6 +324,20 @@ public class FilterActivity extends AppCompatActivity {
                 originalImage = cameraImage.copy(Bitmap.Config.ARGB_8888, true);
 
                 //storeImage(cameraImage);
+                //CODE FOR STORING AN IMAGE
+                int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_CODE_ASK_PERMISSIONS);
+                    return;
+                }
+                //storeImage(bitmap);
+                Toast.makeText(FilterActivity.this,
+                        "Your image is saved to this folder", Toast.LENGTH_LONG)
+                        .show();
+                //SaveImage(bitmap);
+                //saveImageToExternalStorage(bitmap);
+                saveImg(cameraImage);
 
             }
         }
@@ -681,6 +696,7 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
     */
+
 
 
 
