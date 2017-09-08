@@ -9,6 +9,7 @@
  * @author CASA
  */
 import java.awt.Graphics;
+import java.awt.color.*;
 import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.io.File;
@@ -19,7 +20,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.*;
-import java.lang.Object;
+import java.lang.Object; 
+//import ac.essex.graphing.plotting.ContinuousFunctionPlotter; 
 //import android.graphics.Bitmap;
 public class InstAApba extends javax.swing.JDialog {
 
@@ -130,17 +132,63 @@ public class ImagePanel extends JPanel{
             // handle exception...
        }
     }
+public void GaussianKernel(int x, int y, double sigma){
+        int mean = x;
+        double variance = sigma * sigma; 
+        double[][] kernel = new double[x][y];
     
+    for (int y_1 = 0; y_1 < y; y_1++){
+        //double i = Math.pow(1 / (Math.sqrt(2*Math.PI*sigma*sigma))*Math.E, - (y_1*y_1)/2*sigma*sigma);
+        //System.out.printf("k: %f\n", i);
+        for (int x_1=0; x_1<x; x_1++){
+            //Math.pow(sigma, sigma);
+//double k = Math.pow((1/(2*Math.PI*sigma*sigma))*Math.E, -(Math.pow(x_1, 2)+Math.pow(y_1, 2))/(2*Math.pow(sigma, 2)));
+//double k = Math.pow((1/(2*Math.PI*sigma*sigma)), Math.exp(-(Math.pow(x_1, 2)+Math.pow(y_1, 2))/(2*Math.pow(sigma, 2))));
+        double k = (1/(2*Math.PI*sigma*sigma))* Math.pow(Math.E, -(Math.pow(x_1, 2)+Math.pow(y_1, 2))/(2*Math.pow(sigma, 2)));
+        kernel[x_1][y_1] = k;  
+//System.out.printf("k: %f\n", k);
+        //double i = Math.pow(1 / (Math.sqrt(2*Math.PI*sigma*sigma))*Math.E, - (y_1*y_1)/2*sigma*sigma);
+        //double j = Math.pow(1 / (Math.sqrt(2*Math.PI*sigma*sigma))*Math.E, - (x_1*x_1)/2*sigma*sigma);
+        
+   
+        System.out.printf("k: %f\n", k);
+        //imprimirKernel(kernel);
+        
+        }
+    }
+    //System.out.println(kernel[4][4]);
+    //System.out.printf("k: %f\n", kernel[0][0]);
+}
+
+public void imprimirKernel(double[][] kernel){
+    for (int y=0; y<kernel.length; y++){
+        for (int x=0; x<kernel.length; x++){
+            System.out.printf(" - %f\n", kernel[x][y]);
+        }
+        
+    }
+}
+
+
+ 
+
+ 
+    
+   
+ 
+ 
+
 public void GaussianFilter(){
     //Bitmap a;
+    
     try{
 String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
            BufferedImage imagen = ImageIO.read(new File(url));
     //int[ ][ ] kernel = new int[ 3 ][ 3 ];
-    int[ ][ ] kernel = 
+    /*int[ ][ ] kernel = 
         {{1,2, 1}, 
         {2, 4, 2}, 
-        {1, 2, 1}};
+        {1, 2, 1}};*/
     
     /*int[ ][ ] kernel = 
         {{-1, 0, 1}, 
@@ -159,14 +207,14 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
      {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}};/
+     {1, 1, 1, 1, 1, 1, 1}};*/
     
-    /*int[ ][ ] kernel = 
+    int[ ][ ] kernel = 
     {{1, 4, 7, 4, 1}, 
      {4, 16, 26, 16, 4}, 
      {7, 26, 41, 26, 7}, 
      {4, 16, 26, 16, 4}, 
-     {1, 4, 7, 4, 1}};*/
+     {1, 4, 7, 4, 1}};
     
     /*int[ ][ ] kernel = 
     //{{1,  4, 6, 4, 1}, 
@@ -185,12 +233,12 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
         {0.003765,0.015019,0.023792,0.015019,0.003765}};*/
  
     BufferedImage imagenPOST = imagen;
-    int color, blue, green, red;
+    int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
     byte r, g, b;
     double rT = 0.0, gT = 0.0, bT = 0.0, kT = 0.0;
     //kernel = kernelMulEntero(kernel);
     
-    for (int asd=0; asd < 3; asd++){
+    for (int asd=0; asd < 6; asd++){
     for (int y = 1;y<imagen.getHeight()-kernel.length;y=y+1){
             
             for (int x=1; x<imagen.getWidth()-kernel.length; x++){
@@ -200,18 +248,21 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
                 for (int v = 0; v < kernel.length; v++){
                     for (int u = 0; u < kernel.length; u++){
                         color = imagen.getRGB(x+u, y+v);
-                        //imagen.getTransparency();
+                        Color color2 = new Color(color, true);
+                        //color2
                         
+                        //imagen.getTransparency();
+                        /*
                         r = (byte)((0x00FF0000 & color) >> 16);
                         g = (byte)((0x0000FF00 & color) >> 8);
                         b = (byte)((0x000000FF & color));
+                        */
                         
-                        /*
                         blue = color & 0xff;
                         green = (color & 0xff00) >> 8;
                         red = (color & 0xff0000) >> 16;
-                        */
                         
+                        /*
                         rT += r * kernel[u][v];
                         gT += g * kernel[u][v];
                         bT += b * kernel[u][v];
@@ -220,16 +271,17 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
                         r = (byte)(rT / kT + 0.5);
                         g = (byte)(gT / kT + 0.5);
                         b = (byte)(bT / kT + 0.5);
+                        */
+                        //sum +=(0xFF000000 | (int)(r << 16) | (int)(g << 8) | b);
                         
-                        sum +=(0xFF000000 | (int)(r << 16) | (int)(g << 8) | b);
+                        sumGreen += (green) * kernel[u][v];
+                        sumRed += (red) * kernel[u][v];
+                        sumBlue += (blue) * kernel[u][v];
                         
-                        /*
-                        sum += (((green) * kernel[u][v])/1) & -0xff;
-                        sum += (((red) * kernel[u][v])/1) & -0xff00;
-                       sum += (((blue) * kernel[u][v])/1) & -0xff0000;
-                       */
+                       
                         //sum+= (green+blue+red)/3 * kernel[u][v];
                         //sum+= (imagen.getRGB(u, v)) * kernel[x-u][y-v];
+                        
                         //sum = sum + ((green+blue+red)/3) * kernel[u][v];
                         //sum = sum + imagen.getTransparency() * kernel[x-u][y-v];
                     }
@@ -239,14 +291,21 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
                     
                 }
                 //System.out.println(sum/16);
-                
+                /*
                 blue = (int)sum & 0xff;
                 green = ((int)sum & 0xff00) >> 8;
                 red = ((int)sum & 0xff0000) >> 16;
-                
+                */
                // System.out.println(red + ", " + green + " " + blue);
                 //
-                imagenPOST.setRGB(x, y, ((int)sum));
+                sumGreen = sumGreen/kernelSum(kernel);
+                sumRed = sumRed/kernelSum(kernel);
+                sumBlue = sumBlue/kernelSum(kernel);
+                
+                Color suma = new Color(sumRed, sumGreen, sumBlue);
+                
+                
+                imagenPOST.setRGB(x, y, suma.getRGB());
             }
         }
     }
@@ -376,6 +435,8 @@ public static BufferedImage scale(BufferedImage src, int w, int h)
                 InstAApba dialog = new InstAApba(new javax.swing.JFrame(), true);
                 //dialog.start();
                 dialog.GaussianFilter();
+                
+                //dialog.GaussianKernel(5, 5, 2.5);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
