@@ -629,65 +629,44 @@ public class FilterActivity extends AppCompatActivity {
         return sum;
     }
 
-    /*
-    public int kernelSum(double[][] kernel){
-        double sum=0;
-        for (int i = 0; i < kernel.length; i++){
-            for (int j=0; j < kernel.length; j++)
-                sum += kernel[i][j];
-
-        }
-        if (sum<1){
-            return 1;
-        }
-        else{
-            return (int)sum;
-        }
-    }
-    */
 
 
 
     public Bitmap ourFilter(Bitmap bitmap){
         Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 
         int[ ][ ] kernel =
-                        {{0,1,0},{1,-4,1},{0,1,1}};
+                        {{0,0,0,0,0},{0,0,-1,0,0},{0,-1,5,-1,0},{0,0,-1,0,0},{0,0,0,0,0}};
         int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
+        int kernelS = kernelSum(kernel);
 
-        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
+        for (int n_filtros=0; n_filtros < 2; n_filtros++){  //Esto es para aplicar el filtro varias veces
             for (int y = 1;y<image.getHeight()-kernel.length;y=y+1){
-
                 for (int x=1; x<image.getWidth()-kernel.length; x++){
-
+                    double sum = 0;
                     for (int v = 0; v < kernel.length; v++){
                         for (int u = 0; u < kernel.length; u++){
-                            color = image.getPixel(x+u, y+v);
+
+                            color = image.getPixel(x+u,y+v);
                             blue = Color.blue(color);
                             green = Color.green(color);
                             red = Color.red(color);
-
-
+                            //sum = sum + ((green+blue+red)/3) * kernel[u][v];
                             sumGreen += (green) * kernel[u][v];
                             sumRed += (red) * kernel[u][v];
                             sumBlue += (blue) * kernel[u][v];
                         }
                     }
-
-                    sumGreen = sumGreen/kernelSum(kernel);
-                    sumRed = sumRed/kernelSum(kernel);
-                    sumBlue = sumBlue/kernelSum(kernel);
-
-                    imagePOST.setPixel(x, y, Color.rgb(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue)));
+                    image.setPixel(x, y, Color.rgb(Math.abs(sumRed)/kernelS, Math.abs(sumGreen)/kernelS
+                            , Math.abs(sumBlue)/kernelS));
 
                 }
             }
         }
-        return imagePOST;
+        return image;
     }
 
-
+    /* PROBADO PERO ALGO SUCEDE!!!!!!! REVISAR
     public Bitmap GaussianFilter(Bitmap bitmap){
 
         int[ ][ ] kernel =
@@ -703,7 +682,7 @@ public class FilterActivity extends AppCompatActivity {
         Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
 
-        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
+        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 2; cantidad_filtros_aplicados++){
             for (int y = 1;y<image.getHeight()-kernel.length;y=y+1){
 
                 for (int x=1; x<image.getWidth()-kernel.length; x++){
@@ -735,6 +714,61 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
+
+*/
+    public Bitmap GaussianFilter(Bitmap bitmap){
+
+        int[ ][ ] kernel =
+                {{1, 4, 7, 4, 1},
+                        {4, 16, 26, 16, 4},
+                        {7, 26, 41, 26, 7},
+                        {4, 16, 26, 16, 4},
+                        {1, 4, 7, 4, 1}};
+
+
+
+        Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
+
+        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
+            for (int y = 1;y<image.getHeight()-kernel.length;y=y+1){
+
+                for (int x=1; x<image.getWidth()-kernel.length; x++){
+                    //int sum = 0;
+                    double sum = 0;
+
+                    for (int v = 0; v < kernel.length; v++){
+                        for (int u = 0; u < kernel.length; u++){
+                            color = image.getPixel(x+u, y+v);
+
+                            blue = Color.blue(color);
+                            green = Color.green(color);
+                            red = Color.red(color);
+
+
+                            sumGreen += (green) * kernel[u][v];
+                            sumRed += (red) * kernel[u][v];
+                            sumBlue += (blue) * kernel[u][v];
+
+                        }
+
+
+                    }
+
+                    sumGreen = sumGreen/kernelSum(kernel);
+                    sumRed = sumRed/kernelSum(kernel);
+                    sumBlue = sumBlue/kernelSum(kernel);
+
+                    imagePOST.setPixel(x, y, Color.rgb(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue)));
+
+
+                }
+            }
+        }
+        return imagePOST;
+
+    }
 
 
 }
