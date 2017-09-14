@@ -85,6 +85,13 @@
                 android:text="Decomp. Max"
                 android:visibility="visible" />
 
+            <Button
+                android:id="@+id/ourFilterbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="ourFilterbtnClicked"
+                android:text="RobDan" />
+
         </LinearLayout>
     </ScrollView>
 

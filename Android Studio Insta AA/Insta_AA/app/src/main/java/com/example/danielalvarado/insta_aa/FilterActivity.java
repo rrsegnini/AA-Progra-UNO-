@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -66,74 +65,6 @@ public class FilterActivity extends AppCompatActivity {
         imagePicture = (ImageView) findViewById(picImageView);
         //originalImage = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
 
-        /*
-        Button buttonDesaturation = (Button) findViewById(R.id.desaturationBtn);
-        buttonDesaturation.setOnClickListener(new View.OnClickListener()   {
-            public void onClick(View v)  {
-                try {
-                    //DESATURATION FUNCTION
-                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-                    Bitmap newDesBitmap = desaturation(bitmap);
-                    imagePicture.setImageBitmap(newDesBitmap);
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button buttonAveraging = (Button) findViewById(R.id.averagingBtn);
-        buttonAveraging.setOnClickListener(new View.OnClickListener()   {
-            public void onClick(View v)  {
-                try {
-                    //AVERAGING FUNCTION
-                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-                    Bitmap newAvgBitmap = avergingImage(bitmap);
-                    imagePicture.setImageBitmap(newAvgBitmap);
-                    // Show toast when method is called:
-                    //Toast.makeText(this, "AVERAGEALLED", Toast.LENGTH_LONG).show();
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button buttonDeMin = (Button) findViewById(R.id.decompMinBtn);
-        buttonDeMin.setOnClickListener(new View.OnClickListener()   {
-            public void onClick(View v)  {
-                try {
-                    //DECOMP MIN FUNCTION
-                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-                    Bitmap newDeMinBitmap = decompositionMin(bitmap);
-                    imagePicture.setImageBitmap(newDeMinBitmap);
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Button buttonDeMax = (Button) findViewById(R.id.decompMaxBtn);
-        buttonDeMax.setOnClickListener(new View.OnClickListener()   {
-            public void onClick(View v)  {
-                try {
-                    //DECOMP MAX FUNCTION
-                    Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-                    Bitmap newDeMaxBitmap = decompositionMax(bitmap);
-                    imagePicture.setImageBitmap(newDeMaxBitmap);
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        */
 
     }
 
@@ -197,6 +128,8 @@ public class FilterActivity extends AppCompatActivity {
 
     }
 
+
+
     public  void avgBtnClicked(View view) {
         try {
             //AVERAGING FUNCTION
@@ -255,6 +188,22 @@ public class FilterActivity extends AppCompatActivity {
 
     }
 
+    public void ourFilterbtnClicked(View view) {
+        try {
+
+            Bitmap ourFilterA = ourFilter(originalImage);
+
+            imagePicture.setImageBitmap(ourFilterA);
+            //gets a message
+            Toast.makeText(FilterActivity.this,
+                    "RobDan applied", Toast.LENGTH_LONG)
+                    .show();
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     public void gaussianBtnClicked(View view) {
         try {
@@ -532,7 +481,7 @@ public class FilterActivity extends AppCompatActivity {
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
-
+/*
     private void SaveImage(Bitmap finalBitmap) {
 
         String root = Environment.getExternalStorageDirectory().toString();
@@ -590,6 +539,11 @@ public class FilterActivity extends AppCompatActivity {
 
     }
 
+*/
+    /**
+     * Method used to save an image to the gallery
+     * @param image bitmap image thats going to be saved to the SD card
+     */
     public void saveImg(Bitmap  image) {
         File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         String pictureName = getPictureName();
@@ -630,20 +584,14 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
+    /*
     public Bitmap GaussianFilter(Bitmap bitmap){
         Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         int color, red, blue, green;
-        //int[ ][ ] kernel = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
-        /*int[ ][ ] kernel =
-        {{1, 1, 1, 1, 1, 1, 1},
-         {1, 1, 1, 1, 1, 1, 1},
-         {1, 1, 1, 1, 1, 1, 1},
-         {1, 1, 1, 1, 1, 1, 1},
-         {1, 1, 1, 1, 1, 1, 1},
-         {1, 1, 1, 1, 1, 1, 1},
-         {1, 1, 1, 1, 1, 1, 1}};*/
-        int[ ][ ] kernel = {{1, 4, 7, 4, 1},
+
+        int[ ][ ] kernel =
+                {{1, 4, 7, 4, 1},
                 {4, 16, 26, 16, 4},
                 {7, 26, 41, 26, 7},
                 {4, 16, 26, 16, 4},
@@ -669,6 +617,7 @@ public class FilterActivity extends AppCompatActivity {
         return image;
     }
 
+    */
     //Para sacar la suma de todos los elementos del kernel
     public int kernelSum(int[][] kernel){
         int sum=0;
@@ -696,6 +645,94 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
     */
+
+
+
+    public Bitmap ourFilter(Bitmap bitmap){
+        Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        int[ ][ ] kernel =
+                        {{0,1,0},{1,-4,1},{0,1,1}};
+        int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
+
+        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
+            for (int y = 1;y<image.getHeight()-kernel.length;y=y+1){
+
+                for (int x=1; x<image.getWidth()-kernel.length; x++){
+
+                    for (int v = 0; v < kernel.length; v++){
+                        for (int u = 0; u < kernel.length; u++){
+                            color = image.getPixel(x+u, y+v);
+                            blue = Color.blue(color);
+                            green = Color.green(color);
+                            red = Color.red(color);
+
+
+                            sumGreen += (green) * kernel[u][v];
+                            sumRed += (red) * kernel[u][v];
+                            sumBlue += (blue) * kernel[u][v];
+                        }
+                    }
+
+                    sumGreen = sumGreen/kernelSum(kernel);
+                    sumRed = sumRed/kernelSum(kernel);
+                    sumBlue = sumBlue/kernelSum(kernel);
+
+                    imagePOST.setPixel(x, y, Color.rgb(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue)));
+
+                }
+            }
+        }
+        return imagePOST;
+    }
+
+
+    public Bitmap GaussianFilter(Bitmap bitmap){
+
+        int[ ][ ] kernel =
+                        {{1, 4, 7, 4, 1},
+                        {4, 16, 26, 16, 4},
+                        {7, 26, 41, 26, 7},
+                        {4, 16, 26, 16, 4},
+                        {1, 4, 7, 4, 1}};
+
+
+
+        Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
+
+        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
+            for (int y = 1;y<image.getHeight()-kernel.length;y=y+1){
+
+                for (int x=1; x<image.getWidth()-kernel.length; x++){
+
+                    for (int v = 0; v < kernel.length; v++){
+                        for (int u = 0; u < kernel.length; u++){
+                            color = image.getPixel(x+u, y+v);
+                            blue = Color.blue(color);
+                            green = Color.green(color);
+                            red = Color.red(color);
+
+
+                            sumGreen += (green) * kernel[u][v];
+                            sumRed += (red) * kernel[u][v];
+                            sumBlue += (blue) * kernel[u][v];
+                        }
+                    }
+
+                    sumGreen = sumGreen/kernelSum(kernel);
+                    sumRed = sumRed/kernelSum(kernel);
+                    sumBlue = sumBlue/kernelSum(kernel);
+
+                    imagePOST.setPixel(x, y, Color.rgb(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue)));
+
+                }
+            }
+        }
+        return imagePOST;
+    }
 
 
 
