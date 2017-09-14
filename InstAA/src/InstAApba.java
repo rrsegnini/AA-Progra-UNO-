@@ -132,6 +132,30 @@ public class ImagePanel extends JPanel{
             // handle exception...
        }
     }
+    
+    
+public BufferedImage averaging(BufferedImage imagen){
+   
+        int color, blue, green, red;
+        for (int i = 0;i<imagen.getHeight();i++){
+            
+            for (int j=0; j<imagen.getWidth(); j++){
+                //System.out.println(j + " " + i);
+                 color = imagen.getRGB(j, i);
+                 blue = color & 0xff;
+                 green = (color & 0xff00) >> 8;
+                 red = (color & 0xff0000) >> 16;
+
+                Averaging:
+                imagen.setRGB(j, i, ((red+green+blue)/3)*0x00010101);
+               
+            }
+  
+        }
+    
+    return imagen;
+}
+
 public void GaussianKernel(int x, int y, double sigma){
         int mean = x;
         double variance = sigma * sigma; 
@@ -182,7 +206,7 @@ public void GaussianFilter(){
     //Bitmap a;
     
     try{
-String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
+String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/mn.jpg";
            BufferedImage imagen = ImageIO.read(new File(url));
     //int[ ][ ] kernel = new int[ 3 ][ 3 ];
     /*int[ ][ ] kernel = 
@@ -287,6 +311,116 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
         foto.updateUI(); 
 }catch (IOException e){}
 }
+
+public void SobelOperator(){
+    //Bitmap a;
+    
+    try{
+            String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/flor.jpg";
+           BufferedImage imagen = ImageIO.read(new File(url));
+           imagen = averaging(imagen);
+           
+    //int[ ][ ] kernel = new int[ 3 ][ 3 ];
+    /*int[ ][ ] kernel = 
+        {{1,2, 1}, 
+        {2, 4, 2}, 
+        {1, 2, 1}};*/
+    
+    int[ ][ ] kernel = 
+        {{-1, 2, 1}, 
+        {-2, 0, 2}, 
+        {-1, 2, 1}};
+    
+    int[ ][ ] kernel2 = 
+        {{-1, -2, -1}, 
+        {2, 0, 2}, 
+        {1, 2, 1}};
+    /*
+    int[ ][ ] kernel = 
+        {{0, 1, 0}, 
+        {1, -4, 1}, 
+        {0, 1, 0}};*/
+  
+   
+ 
+    BufferedImage imagenPOST = imagen;
+    int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
+    int color2, blue2, green2, red2, sumBlue2 = 0, sumGreen2 = 0, sumRed2 = 0;
+
+    for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados <1 ; cantidad_filtros_aplicados++){
+    for (int y = 1;y<imagen.getHeight()-kernel.length;y=y+1){
+            
+            for (int x=1; x<imagen.getWidth()-kernel.length; x++){
+                //int sum = 0;
+                double sum = 0;
+                
+                for (int v = 0; v < kernel.length; v++){
+                    for (int u = 0; u < kernel.length; u++){
+                        
+                        color = imagen.getRGB(x+u, y+v);
+                        //Color color2 = new Color(color, true);
+          
+                        blue = color & 0xff;
+                        green = (color & 0xff00) >> 8;
+                        red = (color & 0xff0000) >> 16;
+                        
+             
+                        
+                        sumGreen += (green) * kernel[u][v];
+                        sumRed += (red) * kernel[u][v];
+                        sumBlue += (blue) * kernel[u][v];
+                        
+                        sumGreen2 += (green) * kernel2[u][v];
+                        sumRed2 += (red) * kernel2[u][v];
+                        sumBlue2 += (blue) * kernel2[u][v];
+                        
+                       //sum+= (sumGreen+sumBlue+sumRed)/3;
+                        //sum+= Math.abs((green+blue+red)/3) * kernel[u][v];
+                        //sum+= (imagen.getRGB(u, v)) * kernel[x-u][y-v];
+                        
+                        //sum = sum + ((green+blue+red)/3) * kernel[u][v];
+                        //sum = sum + imagen.getTransparency() * kernel[x-u][y-v];
+                    }
+                    
+                //http://rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/
+                
+                    
+                }
+               
+                sumGreen = sumGreen/kernelSum(kernel);
+                sumRed = sumRed/kernelSum(kernel);
+                sumBlue = sumBlue/kernelSum(kernel);
+                
+                sumGreen2 = sumGreen2/kernelSum(kernel2);
+                sumRed2 = sumRed2/kernelSum(kernel2);
+                sumBlue2 = sumBlue2/kernelSum(kernel2);
+                
+                //Color suma = new Color(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue));
+               
+                //imagenPOST.setRGB(x, y, suma.getRGB());
+                double gradient1 = Math.sqrt(Math.pow((double)(sumGreen+sumRed+sumBlue)/3, 2)
+                + Math.pow((double)(sumGreen2+sumRed2+sumBlue2)/3, 2));
+               
+                imagenPOST.setRGB(x, y, ((int)gradient1/kernelSum(kernel))*0x00010101);
+               //imagenPOST.setRGB(x, y, (((sumGreen+sumRed+sumBlue)/3)/kernelSum(kernel))*0x00010101);
+               
+                //imagenPOST.setRGB(x, y, ((int)sum/kernelSum(kernel))*0x00010101);
+                
+                
+            }
+        }
+    }
+    
+        imagenPOST = scale(imagenPOST, 1500, 800);
+        //recorrerPixelesImagen(imagenPOST);
+        
+        foto.setIcon(new ImageIcon(imagenPOST));
+        foto.updateUI(); 
+}catch (IOException e){}
+}
+
+
+
 
 public int kernelSum(int[][] kernel){
     int sum=0;
@@ -404,8 +538,8 @@ public static BufferedImage scale(BufferedImage src, int w, int h)
                 
                 InstAApba dialog = new InstAApba(new javax.swing.JFrame(), true);
                 //dialog.start();
-                dialog.GaussianFilter();
-                
+                //dialog.GaussianFilter();
+                dialog.SobelOperator();
                 //dialog.GaussianKernel(5, 5, 2.5);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
