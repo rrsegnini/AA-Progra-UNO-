@@ -43,7 +43,7 @@ public class FilterActivity extends AppCompatActivity {
     private ImageView imagePicture;
     private Bitmap originalImage;
 
-    public long avgTime,decmpMax,decmpMin,gaussTime;
+    public long avgTime,decmpMax,decmpMin,gaussTime,desatTime,SobelTime;
 
 
     private static final String TAG = "FilterActivity";
@@ -384,6 +384,7 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public Bitmap decompositionMin(Bitmap bitmap) {
+        long stime = getTimeMil();
         int color, red, blue, green,newColor;
 
         //Makes a mutable copy of the bitmap image
@@ -402,10 +403,12 @@ public class FilterActivity extends AppCompatActivity {
                 image.setPixel(x, y, newColor);
             }
         }
+        decmpMin = getTimeMil() - stime;
         return image;
     }
 
     public Bitmap desaturation(Bitmap bitmap) {
+        long stime = getTimeMil();
         int color, red, blue, green,newColor;
 
         //Makes a mutable copy of the bitmap image
@@ -424,6 +427,7 @@ public class FilterActivity extends AppCompatActivity {
                 image.setPixel(x, y, newColor);
             }
         }
+        desatTime = getTimeMil() - stime;
         return image;
     }
 
@@ -761,7 +765,7 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public Bitmap sobelOperator(Bitmap bitmap) {
-
+        long stime = getTimeMil();
         int[ ][ ] kernel =
                 {{-1, 0, 1},
                         {-2, 0, 2},
@@ -778,10 +782,8 @@ public class FilterActivity extends AppCompatActivity {
         Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 
 
-        int color, blue, green, red, grey, sumBlue = 0, sumGreen = 0, sumRed = 0;
-        int color2, blue2, green2, red2, sumBlue2 = 0, sumGreen2 = 0, sumRed2 = 0;
+        int color, blue, green, red;
 
-        int[][] MatrixP=new int[3][3];
 
         int imgHeight = image.getHeight();
         int imgWidth = image.getWidth();
@@ -791,8 +793,8 @@ public class FilterActivity extends AppCompatActivity {
             for (int y = 1;y<imgHeight-kernelLenght;y=y+1){
 
                 for (int x=1; x<imgWidth-kernelLenght; x++){
-                    //int sum = 0;
-                    double sum = 0, sumGrey=0, sumGrey2=0;
+
+                    double sumGrey=0, sumGrey2=0;
 
 
                     for (int v = 0; v < kernelLenght; v++){
@@ -812,11 +814,11 @@ public class FilterActivity extends AppCompatActivity {
                     double gradient1 = Math.sqrt(Math.pow(sumGrey2, 2) + Math.pow(sumGrey, 2));
                     imagePOST.setPixel(x, y, (int)gradient1<<16 | (int)gradient1<<8 | (int)gradient1);
 
-
                 }
 
             }
         }
+        SobelTime = getTimeMil() - stime;
         return imagePOST;
     }
 
