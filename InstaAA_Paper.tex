@@ -1,0 +1,135 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage[spanish]{babel}
+\usepackage{skmath}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\begin{document}
+  \begin{algorithm}
+   \caption{Average Algorithm}
+    \begin{algorithmic}[1]
+      \Function{avergingImage}{Bitmap bitmap }\\\Comment{Donde Bitmap es el el array de pixeles utilizados para programar en Android}
+		\\
+        \State int color, red, blue, green, newColor;
+        \State  Bitmap image $= bitmap.copy(Bitmap.Config.ARGB8888, true)$
+\\
+        \For{$y = 0$ to image height}
+            \For{$x = 0$ to image width}
+            		\State color = image.getPixel(y,x)
+            		\State blue = Color.blue(color)
+            		\State green = Color.green(color)
+            		\State red = Color.red(color)
+            		\State newColor $= ((red+green+blue)/3)*0x00010101$
+                \State image.setPixel(x, y, newColor)
+        		\EndFor
+        \EndFor
+        \State return image
+       \EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+   \caption{Decomposition Max Algorithm}
+    \begin{algorithmic}[1]
+      \Function{decompositionMax}{Bitmap bitmap }\\\Comment{Donde Bitmap es el el array de pixeles utilizados para programar en Android}
+		\\
+        \State int color, red, blue, green, newColor;
+        \State  Bitmap image $= bitmap.copy(Bitmap.Config.ARGB8888, true)$
+\\
+        \For{$y = 0$ to image height}
+            \For{$x = 0$ to image width}
+            		\State color = image.getPixel(y,x)
+            		\State blue = Color.blue(color)
+            		\State green = Color.green(color)
+            		\State red = Color.red(color)
+            		\State newColor $= ((Math.max(Math.max(red, green), blue)))*0x00010101$
+                \State image.setPixel(x, y, newColor)
+        		\EndFor
+        \EndFor
+        \State return image
+       \EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+   \caption{Decomposition Min Algorithm}
+    \begin{algorithmic}[1]
+      \Function{decompositionMin}{Bitmap bitmap }\\\Comment{Donde Bitmap es el el array de pixeles utilizados para programar en Android}
+		\\
+        \State int color, red, blue, green, newColor;
+        \State  Bitmap image $= bitmap.copy(Bitmap.Config.ARGB8888, true)$
+\\
+        \For{$y = 0$ to image height}
+            \For{$x = 0$ to image width}
+            		\State color = image.getPixel(y,x)
+            		\State blue = Color.blue(color)
+            		\State green = Color.green(color)
+            		\State red = Color.red(color)
+            		\State newColor $= ((Math.min(Math.min(red, green), blue)))*0x00010101$
+                \State image.setPixel(x, y, newColor)
+        		\EndFor
+        \EndFor
+        \State return image
+       \EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+   \caption{Desaturation Algorithm}
+    \begin{algorithmic}[1]
+      \Function{desaturation}{Bitmap bitmap }\\\Comment{Donde Bitmap es el el array de pixeles utilizados para programar en Android}
+		\\
+        \State int color, red, blue, green, newColor;
+        \State  Bitmap image $= bitmap.copy(Bitmap.Config.ARGB8888, true)$
+\\
+        \For{$y = 0$ to image height}
+            \For{$x = 0$ to image width}
+            		\State color = image.getPixel(y,x)
+            		\State blue = Color.blue(color)
+            		\State green = Color.green(color)
+            		\State red = Color.red(color)
+            		\State newColor $= (((Math.max(Math.max(red, green), blue) + Math.min(Math.min(red, green),
+                        blue))/2) *0x00010101)$
+                \State image.setPixel(x, y, newColor)
+        		\EndFor
+        \EndFor
+        \State return image
+       \EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+   \caption{Gaussian Algorithm}
+    \begin{algorithmic}[1]
+      \Function{desaturation}{Bitmap bitmap }\\\Comment{Donde Bitmap es el el array de pixeles utilizados para programar en Android}
+		\\
+        \State int color, red, blue, green, newColor;
+        \State  Bitmap image $= bitmap.copy(Bitmap.Config.ARGB8888, true)$
+\\
+        \For{$y = 0$ to image height}
+            \For{$x = 0$ to image width}
+            		\State color = image.getPixel(y,x)
+            		\State blue = Color.blue(color)
+            		\State green = Color.green(color)
+            		\State red = Color.red(color)
+            		\State newColor $= (((Math.max(Math.max(red, green), blue) + Math.min(Math.min(red, green),
+                        blue))/2) *0x00010101)$
+                \State image.setPixel(x, y, newColor)
+        		\EndFor
+        \EndFor
+        \State return image
+       \EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}

@@ -44,6 +44,17 @@
             app:layout_constraintLeft_toLeftOf="parent">
 
             <Button
+                android:id="@+id/averagingBtn"
+                android:layout_width="185dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="174dp"
+                android:onClick="avgBtnClicked"
+                android:text="Averaging"
+                android:visibility="visible"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:layout_editor_absoluteY="388dp" />
+
+            <Button
                 android:id="@+id/gaussBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,17 +76,6 @@
                 android:onClick="decompMinBtnClicked"
                 android:text="Decomp. Min"
                 android:visibility="visible" />
-
-            <Button
-                android:id="@+id/averagingBtn"
-                android:layout_width="185dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="174dp"
-                android:onClick="avgBtnClicked"
-                android:text="Averaging"
-                android:visibility="visible"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:layout_editor_absoluteY="388dp" />
 
             <Button
                 android:id="@+id/decompMaxBtn"
