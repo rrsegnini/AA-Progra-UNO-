@@ -322,56 +322,28 @@ public void SobelOperator(){
     //Bitmap a;
     
     try{
-            String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/yop.jpg";
+            String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/perro.jpg";
             BufferedImage imagen = ImageIO.read(new File(url));
             //outputImg=new BufferedImage(imagen.getWidth(),imagen.getHeight(),java.awt.image.BufferedImage.TYPE_INT_RGB);
            //imagen = averaging(imagen);
-           
-    //int[ ][ ] kernel = new int[ 3 ][ 3 ];
-    /*int[ ][ ] kernel = 
-        {{1,2, 1}, 
-        {2, 4, 2}, 
-        {1, 2, 1}};*/
+
     
     int[ ][ ] kernel = 
         {{-1, 0, 1}, 
         {-2, 0, 2}, 
         {-1, 0, 1}};
-    /*
-    int[ ][ ] kernel = 
-        {{1, 0, -1}, 
-        {2, 0, -2}, 
-        {1, 0, -1}};*/
-    
     
     int[ ][ ] kernel2 = 
         {{-1, -2, -1}, 
         {0, 0, 0}, 
         {1, 2, 1}};
-    
-    
-    
-    /*int[ ][ ] kernel = 
-        {{1, 2, 1}, 
-        {0, 0, 0}, 
-        {-1, -2, -1}};*/
-    /*
-    int[ ][ ] kernel = 
-        {{0, 100, 0}, 
-        {100, 50, -100}, 
-        {0, -100, 0}};*/
-  
-   
- 
+
     BufferedImage imagenPOST = imagen;
-    int color, blue, green, red, grey, sumBlue = 0, sumGreen = 0, sumRed = 0;
-    int color2, blue2, green2, red2, sumBlue2 = 0, sumGreen2 = 0, sumRed2 = 0;
-    
-    int[][] MatrixP=new int[3][3];
-    
+    int color, blue, green, red;
+
     for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados <1 ; cantidad_filtros_aplicados++){
     for (int y = 1;y<imagen.getHeight()-kernel.length;y++){
-            
+         
             for (int x=1; x<imagen.getWidth()-kernel.length; x++){
                 //int sum = 0;
                 double sum = 0, sumGrey=0, sumGrey2=0;
@@ -399,17 +371,10 @@ public void SobelOperator(){
                     }
                 }
                 double gradient1 = Math.sqrt(Math.pow(sumGrey2, 2) + Math.pow(sumGrey, 2));
-                imagenPOST.setRGB(x, y, (int)gradient1<<16 | (int)gradient1<<8 | (int)gradient1);
-               
-                
-            }
-            
+                imagenPOST.setRGB(x, y, (int)gradient1<<16 | (int)gradient1<<8 | (int)gradient1);                              
+            }           
         }
     }
-    
-        
-        //recorrerPixelesImagen(imagenPOST);
-        
         File outputfile = new File("C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/mn53.jpg");
         ImageIO.write(imagenPOST,"jpg", outputfile);
         
