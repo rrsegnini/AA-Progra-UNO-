@@ -387,8 +387,8 @@ public void SobelOperator(){
                         green = (color & 0xff00) >> 8;
                         red = (color & 0xff0000) >> 16;
                         
-                        //color = (red+green+blue)/3;
-                        color = Math.min(Math.min(red,green),blue);
+                        color = (red+green+blue)/3;
+                        //color = Math.min(Math.min(red,green),blue);
     
                        
                         sumGrey += (color) * kernel[u][v];
