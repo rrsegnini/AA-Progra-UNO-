@@ -112,18 +112,41 @@
     \begin{algorithmic}[1]
       \Function{desaturation}{Bitmap bitmap }\\\Comment{Donde Bitmap es el el array de pixeles utilizados para programar en Android}
 		\\
-        \State int color, red, blue, green, newColor;
+        \State int color, blue, green, red, sumBlue = 0, sumGreen = 0,				 \State sumRed = 0;
         \State  Bitmap image $= bitmap.copy(Bitmap.Config.ARGB8888, true)$
 \\
-        \For{$y = 0$ to image height}
-            \For{$x = 0$ to image width}
-            		\State color = image.getPixel(y,x)
-            		\State blue = Color.blue(color)
-            		\State green = Color.green(color)
-            		\State red = Color.red(color)
-            		\State newColor $= (((Math.max(Math.max(red, green), blue) + Math.min(Math.min(red, green),
-                        blue))/2) *0x00010101)$
-                \State image.setPixel(x, y, newColor)
+		\State $int[ ][ ] kernel =$
+          \State ${1, 4, 7, 4, 1},$
+          \State ${4, 16, 26, 16, 4},$
+                        \State ${7, 26, 41, 26, 7},$
+                       \State $ {4, 16, 26, 16, 4},$
+                        \State ${1, 4, 7, 4, 1} $
+                        \\
+                        \\
+         \State int imgH $= image.getHeight(); $
+        \State int imgW $= image.getWidth(); $
+       \State int kerL $= kernel.lenght; $
+        
+\\
+        \For{$int y = 1;y<imgH-kL;y=y+1$}
+            \For{$int y = 1;y<imgW-kL;x++$}
+				\For{$int v= 0; v < kL; v++$}
+					\For{$int u= 0; u < kL; u++$}
+						\State color$= image.getPixel(x+u,y+v)$
+						\State blue = Color.blue(color)
+            				\State green = Color.green(color)
+            				\State red = Color.red(color)
+            				\State sumGreen $+= (green)*kernel[u][v]$
+            				\State sumBlue $+= (blue)*kernel[u][v]$
+            				\State sumRed $+= (red)*kernel[u][v]$
+            			\EndFor
+				\EndFor
+				\State sumGreen $=sumGreen/kernelSum$
+				\State sumBlue $=sumBlue/kernelSum$
+				\State sumRed $=sumRed/kernelSum$
+				\State newImg = $ setPixel(x, y, $				
+				\State Color.setRGB(Math.abs(sumRed), 
+				\State Math.abs(sumGreen), Math.abs(sumBlue)));
         		\EndFor
         \EndFor
         \State return image
@@ -131,5 +154,58 @@
 
 \end{algorithmic}
 \end{algorithm}
+
+
+
+\begin{algorithm}
+   \caption{Sobel Operator Algorithm}
+    \begin{algorithmic}[1]
+      \Function{desaturation}{Bitmap bitmap }
+		\\
+        \State int color, blue, green, red, sumBlue = 0, sumGreen = 0,				 \State sumRed = 0;
+        \State  Bitmap image $= bitmap.copy(Bitmap.Config.ARGB8888, true)$
+\\
+		\State $int[ ][ ] kernel =$
+          \State ${-1, 0, 1},$
+          \State ${-2, 0, 2}$
+                        \State ${-1, 0, 11},$
+                        \\
+                        \State $int[ ][ ] kernel2 =$
+          \State ${-1, -2, -1},$
+          \State ${0,0,0},$
+                        \State ${1,2,1},$
+                        \\
+                        \\
+         \State int imgH $= image.getHeight(); $
+        \State int imgW $= image.getWidth(); $
+       \State int kerL $= kernel.lenght; $
+        
+\\
+        \For{$int y = 1;y<imgH-kL;y=y+1$}
+            \For{$int y = 1;y<imgW-kL;x++$}
+            \State $sumGrey = 0, sumGrey2 = 0$
+				\For{$int v= 0; v < kL; v++$}
+					\For{$int u= 0; u < kL; u++$}
+						\State color$= image.getPixel(x+u,y+v)$
+						\State blue = Color.blue(color)
+            				\State green = Color.green(color)
+            				\State red = Color.red(color)
+            				\State color $= (red+green+blue)/3$
+            				\State sumGrey $+= (color) * kernel[u][v]$
+            				\State sumGrey2 $+= (color) * kernel2[u][v]$
+            			\EndFor
+				\EndFor
+				\State double gradient1 
+				\State $=$ Math.sqrt(Math.pow(sumGrey2, 2)$+$Math.pow(sumGrey, 2));
+				\State newImg = $ setPixel(x, y,  (int)gradient1<<16 | $ 
+				\State $(int)gradient1<<8 | (int)gradient1)$
+        		\EndFor
+        \EndFor
+        \State return newImg
+       \EndFunction
+
+\end{algorithmic}
+\end{algorithm}
+
 
 \end{document}
