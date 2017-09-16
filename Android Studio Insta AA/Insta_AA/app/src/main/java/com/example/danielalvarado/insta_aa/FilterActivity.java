@@ -716,15 +716,19 @@ public class FilterActivity extends AppCompatActivity {
         Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
 
-        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
-            for (int y = 1;y<image.getHeight()-kernel.length;y=y+1){
+        int imgHeight = image.getHeight();
+        int imgWidth = image.getWidth();
+        int kernelLenght = kernel.length;
 
-                for (int x=1; x<image.getWidth()-kernel.length; x++){
+        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
+            for (int y = 1;y<imgHeight-kernelLenght;y=y+1){
+
+                for (int x=1; x<imgWidth-kernelLenght; x++){
                     //int sum = 0;
                     double sum = 0;
 
-                    for (int v = 0; v < kernel.length; v++){
-                        for (int u = 0; u < kernel.length; u++){
+                    for (int v = 0; v < kernelLenght; v++){
+                        for (int u = 0; u < kernelLenght; u++){
                             color = image.getPixel(x+u, y+v);
 
                             blue = Color.blue(color);
@@ -757,15 +761,11 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public Bitmap sobelOperator(Bitmap bitmap) {
+
         int[ ][ ] kernel =
                 {{-1, 0, 1},
                         {-2, 0, 2},
                         {-1, 0, 1}};
-    /*
-    int[ ][ ] kernel =
-        {{1, 0, -1},
-        {2, 0, -2},
-        {1, 0, -1}};*/
 
 
         int[ ][ ] kernel2 =
@@ -783,16 +783,20 @@ public class FilterActivity extends AppCompatActivity {
 
         int[][] MatrixP=new int[3][3];
 
-        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados <1 ; cantidad_filtros_aplicados++){
-            for (int y = 1;y<image.getHeight()-kernel.length;y++){
+        int imgHeight = image.getHeight();
+        int imgWidth = image.getWidth();
+        int kernelLenght = kernel.length;
 
-                for (int x=1; x<image.getWidth()-kernel.length; x++){
+        for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
+            for (int y = 1;y<imgHeight-kernelLenght;y=y+1){
+
+                for (int x=1; x<imgWidth-kernelLenght; x++){
                     //int sum = 0;
                     double sum = 0, sumGrey=0, sumGrey2=0;
 
 
-                    for (int v = 0; v < kernel.length; v++){
-                        for (int u = 0; u < kernel.length; u++){
+                    for (int v = 0; v < kernelLenght; v++){
+                        for (int u = 0; u < kernelLenght; u++){
 
                             color = image.getPixel(x+u, y+v);
                             blue = Color.blue(color);
