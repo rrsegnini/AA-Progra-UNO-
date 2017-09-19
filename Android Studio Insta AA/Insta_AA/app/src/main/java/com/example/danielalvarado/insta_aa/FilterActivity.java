@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,7 +44,7 @@ public class FilterActivity extends AppCompatActivity {
     private ImageView imagePicture;
     private Bitmap originalImage;
 
-    public long avgTime,decmpMax,decmpMin,gaussTime,desatTime,SobelTime;
+    public long avgTime,decmpMax,decmpMin,gaussTime,desatTime,SobelTime,gaussTimePRUEBA;
 
 
     private static final String TAG = "FilterActivity";
@@ -73,10 +74,15 @@ public class FilterActivity extends AppCompatActivity {
 
     //problems
     public void saveImgBtnClicked(View view) {
-        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int hasWriteContactsPermission = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
         if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_CODE_ASK_PERMISSIONS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_CODE_ASK_PERMISSIONS);
+            }
             return;
         }
 
@@ -211,7 +217,6 @@ public class FilterActivity extends AppCompatActivity {
         try {
 
             Bitmap newGausBitmap = GaussianFilter(originalImage);
-
             imagePicture.setImageBitmap(newGausBitmap);
             //gets a message
             Toast.makeText(FilterActivity.this,
@@ -275,10 +280,15 @@ public class FilterActivity extends AppCompatActivity {
 
                 //storeImage(cameraImage);
                 //CODE FOR STORING AN IMAGE
-                int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                int hasWriteContactsPermission = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
                 if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            REQUEST_CODE_ASK_PERMISSIONS);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                REQUEST_CODE_ASK_PERMISSIONS);
+                    }
                     return;
                 }
                 //storeImage(bitmap);
@@ -434,11 +444,8 @@ public class FilterActivity extends AppCompatActivity {
 
     }
 
+    /*
 
-    /**
-     * Stores the image in the SD card
-     * @param image bitmap image that is going to be saved
-     */
     private void storeImage(Bitmap image) {
         File pictureFile = getOutputMediaFile();
         if (pictureFile == null) {
@@ -458,7 +465,8 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
-    /** Create a File for saving an image or video */
+
+
     private  File getOutputMediaFile(){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
@@ -483,7 +491,7 @@ public class FilterActivity extends AppCompatActivity {
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
-/*
+
     private void SaveImage(Bitmap finalBitmap) {
 
         String root = Environment.getExternalStorageDirectory().toString();
@@ -586,7 +594,7 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
-    */
+
     //Para sacar la suma de todos los elementos del kernel
     public int kernelSum(int[][] kernel){
         int sum=0;
@@ -700,6 +708,52 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
         SobelTime = getTimeMil() - stime;
+        return imagePOST;
+    }
+
+
+    public Bitmap gaussiano2(Bitmap bitmap){
+        long startTime = getTimeMil();
+        int[][] kernel =
+                {{1, 4, 7, 4, 1},
+                        {4, 16, 26, 16, 4},
+                        {7, 26, 41, 26, 7},
+                        {4, 16, 26, 16, 4},
+                        {1, 4, 7, 4, 1}};
+
+        Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
+
+        int imgHeight = image.getHeight();
+        int imgWidth = image.getWidth();
+        int kernelLength = kernel.length;
+
+        for (int cantidad_filtros_aplicados = 0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++) {
+            for (int y = 1; y < imgHeight - kernelLength; y = y + 1) {
+
+                for (int x = 1; x < imgWidth - kernelLength; x++) {
+                    for (int v = 0; v < kernelLength; v++) {
+                        for (int u = 0; u < kernelLength; u++) {
+
+                            color = image.getPixel(x + u, y + v);
+                            blue = Color.blue(color);
+                            green = Color.green(color);
+                            red = Color.red(color);
+                            sumGreen += (green) * kernel[u][v];
+                            sumRed += (red) * kernel[u][v];
+                            sumBlue += (blue) * kernel[u][v];
+
+                        }
+                    }
+                    sumGreen = sumGreen / kernelSum(kernel);
+                    sumRed = sumRed / kernelSum(kernel);
+                    sumBlue = sumBlue / kernelSum(kernel);
+                    imagePOST.setPixel(x, y, Color.rgb(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue)));
+                }
+            }
+        }
+        gaussTime = getTimeMil() - startTime;
         return imagePOST;
     }
 
