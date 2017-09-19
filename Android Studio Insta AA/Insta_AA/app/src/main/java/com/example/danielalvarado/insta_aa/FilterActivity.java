@@ -87,7 +87,7 @@ public class FilterActivity extends AppCompatActivity {
         }
 
         Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
-        //storeImage(bitmap);
+
         Toast.makeText(FilterActivity.this,
                 "Your image is saved to this folder", Toast.LENGTH_LONG)
                 .show();
@@ -109,7 +109,6 @@ public class FilterActivity extends AppCompatActivity {
             saveImg(bitmap);
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -119,7 +118,6 @@ public class FilterActivity extends AppCompatActivity {
 
         try {
             //DESATURATION FUNCTION
-            Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
             Bitmap newDesBitmap = desaturation(originalImage);
             imagePicture.setImageBitmap(newDesBitmap);
             //gets a message
@@ -181,7 +179,6 @@ public class FilterActivity extends AppCompatActivity {
     public void decompMinBtnClicked(View view) {
         try {
             //DECOMP MIN FUNCTION
-            Bitmap bitmap = ((BitmapDrawable )imagePicture.getDrawable()).getBitmap();
             Bitmap newDeMinBitmap = decompositionMin(originalImage);
             imagePicture.setImageBitmap(newDeMinBitmap);
             //gets a message
@@ -269,16 +266,10 @@ public class FilterActivity extends AppCompatActivity {
             if (requestCode == CAMERA_REQUEST)  {
                 // we are hearing back from the camera.
                 Bitmap cameraImage = (Bitmap) data.getExtras().get("data");//accessing the image taken
-                //Averaging
-                //Bitmap newImage = avergingImage(cameraImage);
-                //Decomposition MAX
-                //Bitmap newImage = decompositionMax(cameraImage);
 
                 imagePicture.setImageBitmap(cameraImage);
                 //creates the private ORIGINAL IMAGE (GLOBAL)
                 originalImage = cameraImage.copy(Bitmap.Config.ARGB_8888, true);
-
-                //storeImage(cameraImage);
                 //CODE FOR STORING AN IMAGE
                 int hasWriteContactsPermission = 0;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -291,12 +282,11 @@ public class FilterActivity extends AppCompatActivity {
                     }
                     return;
                 }
-                //storeImage(bitmap);
+
                 Toast.makeText(FilterActivity.this,
                         "Your image is saved to this folder", Toast.LENGTH_LONG)
                         .show();
-                //SaveImage(bitmap);
-                //saveImageToExternalStorage(bitmap);
+
                 saveImg(cameraImage);
             }
         }
@@ -676,18 +666,18 @@ public class FilterActivity extends AppCompatActivity {
 
         int imgHeight = image.getHeight();
         int imgWidth = image.getWidth();
-        int kernelLenght = kernel.length;
+        int kernelLength = kernel.length;
 
         for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
-            for (int y = 1;y<imgHeight-kernelLenght;y=y+1){
+            for (int y = 1;y<imgHeight-kernelLength;y=y+1){
 
-                for (int x=1; x<imgWidth-kernelLenght; x++){
+                for (int x=1; x<imgWidth-kernelLength; x++){
 
                     double sumGrey=0, sumGrey2=0;
 
 
-                    for (int v = 0; v < kernelLenght; v++){
-                        for (int u = 0; u < kernelLenght; u++){
+                    for (int v = 0; v < kernelLength; v++){
+                        for (int u = 0; u < kernelLength; u++){
 
                             color = image.getPixel(x+u, y+v);
                             blue = Color.blue(color);
@@ -711,49 +701,73 @@ public class FilterActivity extends AppCompatActivity {
         return imagePOST;
     }
 
-
-    public Bitmap gaussiano2(Bitmap bitmap){
-        long startTime = getTimeMil();
-        int[][] kernel =
-                {{1, 4, 7, 4, 1},
-                        {4, 16, 26, 16, 4},
-                        {7, 26, 41, 26, 7},
-                        {4, 16, 26, 16, 4},
-                        {1, 4, 7, 4, 1}};
-
+    public Bitmap GaussianFilterMejorado(Bitmap bitmap) {
         Bitmap image = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         Bitmap imagePOST = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
 
+        int[] kernelX = new int[3];
+        kernelX[0] = 4;
+        kernelX[1] = 8;
+        kernelX[2] = 4;
+
+        int[] kernelY = new int[3];
+        kernelY[0] = 4;
+        kernelY[1] = 8;
+        kernelY[2] = 4;
+
+        int[][] kernel =
+                {{1, 2, 1},
+                        {2, 4, 2},
+                        {1, 2, 1}};
+
+        int kernelS = kernelSum(kernel);
+
+        int colorX, colorY, blueX, greenX, redX,
+                blueY, greenY, redY;
         int imgHeight = image.getHeight();
         int imgWidth = image.getWidth();
-        int kernelLength = kernel.length;
+        int kernelXLength = kernelX.length;
+
 
         for (int cantidad_filtros_aplicados = 0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++) {
-            for (int y = 1; y < imgHeight - kernelLength; y = y + 1) {
+            for (int y = 1; y < imgHeight - kernelXLength; y = y + 1) {
+                for (int x = 1; x < imgWidth - kernelXLength; x++) {
 
-                for (int x = 1; x < imgWidth - kernelLength; x++) {
-                    for (int v = 0; v < kernelLength; v++) {
-                        for (int u = 0; u < kernelLength; u++) {
+                    int sumBlue = 0, sumGreen = 0, sumRed = 0;
+                    for (int u = 0; u < kernelXLength; u++) {
+                        colorX = image.getPixel(x + u, y);
+                        colorY = image.getPixel(x, y + u);
 
-                            color = image.getPixel(x + u, y + v);
-                            blue = Color.blue(color);
-                            green = Color.green(color);
-                            red = Color.red(color);
-                            sumGreen += (green) * kernel[u][v];
-                            sumRed += (red) * kernel[u][v];
-                            sumBlue += (blue) * kernel[u][v];
 
-                        }
+                        blueX = Color.blue(colorX);
+                        greenX = Color.green(colorX);
+                        redX = Color.red(colorX);
+
+                        blueY = Color.blue(colorY);
+                        greenY = Color.green(colorY);
+                        redY = Color.red(colorY);
+
+
+                        sumGreen += (greenX) * kernelX[u];
+                        sumRed += (redX) * kernelX[u];
+                        sumBlue += (blueX) * kernelX[u];
+
+                        sumGreen += (greenY) * kernelY[u];
+                        sumRed += (redY) * kernelY[u];
+                        sumBlue += (blueY) * kernelY[u];
+
                     }
-                    sumGreen = sumGreen / kernelSum(kernel);
-                    sumRed = sumRed / kernelSum(kernel);
-                    sumBlue = sumBlue / kernelSum(kernel);
+
+                    sumGreen = sumGreen / (kernelS * 2);
+                    sumRed = sumRed / (kernelS * 2);
+                    sumBlue = sumBlue / (kernelS * 2);
+
                     imagePOST.setPixel(x, y, Color.rgb(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue)));
+
                 }
             }
         }
-        gaussTime = getTimeMil() - startTime;
+
         return imagePOST;
     }
 
