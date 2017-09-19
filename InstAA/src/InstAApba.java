@@ -327,6 +327,7 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
     int color, colorX, colorY, blueX, greenX, redX,
             blueY, greenY, redY;
 
+    for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
     for (int y = 1;y<imagen.getHeight()-kernelX.length;y=y+1){
             
             for (int x=1; x<imagen.getWidth()-kernelX.length; x++){
