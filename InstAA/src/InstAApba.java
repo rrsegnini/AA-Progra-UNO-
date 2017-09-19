@@ -209,49 +209,32 @@ public void GaussianFilter(){
     //Bitmap a;
     
     try{
-String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar6.jpg";
+String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
            BufferedImage imagen = ImageIO.read(new File(url));
-    //int[ ][ ] kernel = new int[ 3 ][ 3 ];
+ 
     /*int[ ][ ] kernel = 
         {{1,2, 1}, 
         {2, 4, 2}, 
         {1, 2, 1}};*/
-    
-    /*int[ ][ ] kernel = 
-        {{-1, 0, 1}, 
-        {-2, 0, 2}, 
-        {-1, 2, 1}};*/
-    /*
-    int[ ][ ] kernel = 
-        {{-1, 0, 1}, 
-        {-2, 0, 2}, 
-        {-1, 0, 1}};*/
-    
-    /*int[ ][ ] kernel = 
-    {{1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}, 
-     {1, 1, 1, 1, 1, 1, 1}};*/
+
    
-    int[ ][ ] kernel = 
+   /* int[ ][ ] kernel = 
     {{1, 4, 7, 4, 1}, 
      {4, 16, 26, 16, 4}, 
      {7, 26, 41, 26, 7}, 
      {4, 16, 26, 16, 4}, 
-     {1, 4, 7, 4, 1}};
+     {1, 4, 7, 4, 1}};*/
     
-    /*int[ ][ ] kernel = 
-    //{{1,  4, 6, 4, 1}, 
-        {{3,  6, 12, 6, 3}, 
-     {3, 12, 25, 12, 3}, 
-     {6, 25, 50, 25, 6}, 
-     {3, 12, 25, 12, 3}, 
-     {3,  6, 12, 6, 3}};*/
-    
-    //, {1, 43, 6, 4, 1}};
+    int[ ][ ] kernel = 
+    {{0, 0, 0, 5, 0, 0, 0}, 
+     {0, 5, 18, 32, 18, 5, 0}, 
+     {0, 18, 64, 100, 64, 18, 0}, 
+     {5, 32, 100, 100, 100, 32, 5}, 
+     {0, 18, 64, 100, 64, 18, 0}, 
+     {0, 5, 18, 32, 28, 5, 0}, 
+     {0, 0, 0, 5, 0, 0, 0}};
+
+   
     
     /*double[ ][ ] kernel = {{0.003765, 0.015019,0.023792,0.015019,0.003765},
             {0.015019,0.059912,0.094907,0.059912,0.015019}, 
@@ -260,7 +243,7 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar6.jpg";
         {0.003765,0.015019,0.023792,0.015019,0.003765}};*/
  
     BufferedImage imagenPOST = imagen;
-    int color, blue, green, red, sumBlue = 0, sumGreen = 0, sumRed = 0;
+    int color, blue, green, red;
 
     for (int cantidad_filtros_aplicados=0; cantidad_filtros_aplicados < 1; cantidad_filtros_aplicados++){
     for (int y = 1;y<imagen.getHeight()-kernel.length;y=y+1){
@@ -268,6 +251,7 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar6.jpg";
             for (int x=1; x<imagen.getWidth()-kernel.length; x++){
                 //int sum = 0;
                 double sum = 0;
+                int sumBlue = 0, sumGreen = 0, sumRed = 0;
                 
                 for (int v = 0; v < kernel.length; v++){
                     for (int u = 0; u < kernel.length; u++){
@@ -309,13 +293,96 @@ String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar6.jpg";
     
         //imagenPOST = scale(imagenPOST, 1500, 800);
         //recorrerPixelesImagen(imagenPOST);
-        
+        File outputfile = new File("C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/sieteporsiete.jpg");
+        ImageIO.write(imagenPOST,"jpg", outputfile);
         foto.setIcon(new ImageIcon(imagenPOST));
         foto.updateUI(); 
 }catch (IOException e){}
 }
 
+public void GaussianFilterMejorado(){
+    //Bitmap a;
+    
+    try{
+String url = "C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/klamar.jpg";
+           BufferedImage imagen = ImageIO.read(new File(url));
+    //int[ ][ ] kernel = new int[ 3 ][ 3 ];
+    
+    int[] kernelX = new int[3];
+    kernelX[0] = 4;
+    kernelX[1] = 8;
+    kernelX[2] = 4;
+    
+    int[] kernelY = new int[3];
+    kernelY[0] = 4;
+    kernelY[1] = 8;
+    kernelY[2] = 4;
+    
+    int[ ][ ] kernel = 
+        {{1,2, 1}, 
+        {2, 4, 2}, 
+        {1, 2, 1}};
+ 
+    BufferedImage imagenPOST = imagen;
+    int color, colorX, colorY, blueX, greenX, redX,
+            blueY, greenY, redY;
 
+    for (int y = 1;y<imagen.getHeight()-kernelX.length;y=y+1){
+            
+            for (int x=1; x<imagen.getWidth()-kernelX.length; x++){
+                //int sum = 0;
+                double sum = 0;
+                int sumBlue = 0, sumGreen = 0, sumRed = 0,
+                        sumBlueY = 0, sumGreenY = 0, sumRedY = 0;
+                    for (int u = 0; u < kernelX.length; u++){
+                        colorX = imagen.getRGB(x+u, y);
+                        colorY = imagen.getRGB(x, y+u);
+                        //Color color2 = new Color(color, true);
+          
+                        blueX = colorX & 0xff;
+                        greenX = (colorX & 0xff00) >> 8;
+                        redX = (colorX & 0xff0000) >> 16;
+                        
+                        blueY = colorY & 0xff;
+                        greenY = (colorY & 0xff00) >> 8;
+                        redY = (colorY & 0xff0000) >> 16;
+             
+                        
+                        sumGreen += (greenX) * kernelX[u];
+                        sumRed += (redX) * kernelX[u];
+                        sumBlue += (blueX) * kernelX[u];
+                        
+                        sumGreen += (greenY) * kernelY[u];
+                        sumRed += (redY) * kernelY[u];
+                        sumBlue += (blueY) * kernelY[u];
+                        
+                       
+                        //sum+= (green+blue+red)/3 * kernel[u][v];
+                        //sum+= (imagen.getRGB(u, v)) * kernel[x-u][y-v];
+                        
+                        //sum = sum + ((green+blue+red)/3) * kernel[u][v];
+                        //sum = sum + imagen.getTransparency() * kernel[x-u][y-v];
+                    }
+                    
+                sumGreen = sumGreen/(kernelSum(kernel)*2);
+                sumRed = sumRed/(kernelSum(kernel)*2);
+                sumBlue = sumBlue/(kernelSum(kernel)*2);
+                
+                Color suma = new Color(Math.abs(sumRed), Math.abs(sumGreen), Math.abs(sumBlue));
+                imagenPOST.setRGB(x, y, suma.getRGB());
+                
+            }
+        }
+    }
+    
+        //imagenPOST = scale(imagenPOST, 1500, 800);
+        //recorrerPixelesImagen(imagenPOST);
+        File outputfile = new File("C:/Users/CASA/Desktop/InstAA/AA-Progra-UNO-/gauss2.jpg");
+        ImageIO.write(imagenPOST,"jpg", outputfile);
+        foto.setIcon(new ImageIcon(imagenPOST));
+        foto.updateUI(); 
+}catch (IOException e){}
+}
 
 
 public void SobelOperator(){
@@ -503,9 +570,9 @@ public static BufferedImage scale(BufferedImage src, int w, int h)
                 
                 InstAApba dialog = new InstAApba(new javax.swing.JFrame(), true);
                 //dialog.start();
-                //dialog.GaussianFilter();
-                dialog.SobelOperator();
-                
+                dialog.GaussianFilter();
+                //dialog.SobelOperator();
+                //dialog.GaussianFilterMejorado();
                 //dialog.robado();
                 //dialog.GaussianKernel(5, 5, 2.5);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
